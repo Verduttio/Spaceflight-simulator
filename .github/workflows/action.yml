@@ -1,8 +1,6 @@
 name: Tests
 
-on:
-  push:
-    branches: [master]
+on: push
 
 jobs:
   buildAndTest:
@@ -12,17 +10,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Create Build Directory
-        run: cmake -E make_directory tests/build
-
-      - name: Install Packages
-        run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y gcc-multilib python3 curl zip unzip
-          sudo apt-get install -y --no-install-recommends libx11-dev libxcursor-dev libxrandr-dev libxinerama-dev libxi-dev libxext-dev libxfixes-dev libgl1-mesa-dev
-
       - name: Build
-        working-directory: tests/build
+        working-directory: tests
         run: |
-          cmake ..
-          cmake --build .
+          g++ -std=c++20 simpleTest.cpp -o test
+
+      - name: Run
+        working-directory: tests
+        run: |
+          ls -la
+          chmod +x test
+          ./test
