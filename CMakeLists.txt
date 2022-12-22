@@ -18,7 +18,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include_directories(${CMAKE_SOURCE_DIR})
 file(GLOB SOURCES "${CMAKE_SOURCE_DIR}/*.cpp")
 
-add_executable(${PROJECT_NAME} ${SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES} core/rocket/RocketComponent.h core/rocket/Engine.h core/rocket/FuelTank.h core/rocket/RocketStage.h core/rocket/MountSide.h core/rocket/Rocket.h core/planet/AtmosphereLayer.h core/planet/Atmosphere.h core/planet/Planet.h core/places/Shed.h core/places/LaunchPad.h core/places/MissionControl.h)
 add_executable(tests tests/simpleTest.cpp)
 
 #set(Boost_USE_STATIC_LIBS        ON) # only find static libs
