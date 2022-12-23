@@ -5,7 +5,7 @@
 #ifndef ABSTRACTPROGRAMMINGPROJECT_OUT_FUELTANK_H
 #define ABSTRACTPROGRAMMINGPROJECT_OUT_FUELTANK_H
 
-#include "core/rocket/RocketComponent.h"
+#include "../RocketComponent.h"
 
 class FuelTank : public RocketComponent{
     double fuelAmount;  // in tons

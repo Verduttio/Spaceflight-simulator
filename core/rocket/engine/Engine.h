@@ -5,7 +5,7 @@
 #ifndef ABSTRACTPROGRAMMINGPROJECT_OUT_ENGINE_H
 #define ABSTRACTPROGRAMMINGPROJECT_OUT_ENGINE_H
 
-#include "core/rocket/RocketComponent.h"
+#include "../RocketComponent.h"
 
 class Engine : public RocketComponent {
     int thrust;
