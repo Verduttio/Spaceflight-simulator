@@ -6,7 +6,18 @@
 #define ABSTRACTPROGRAMMINGPROJECT_OUT_ROCKETCOMPONENT_H
 
 class RocketComponent {
-    int mass;   // in tons
+protected:
+    // Raw component's mass
+    // without any additional objects like fuel.
+    double mass;
+public:
+    void setMass(double _mass) {
+        this->mass = _mass;
+    }
+
+    [[nodiscard]] double getMass() const {
+        return this->mass;
+    }
 };
 
 #endif //ABSTRACTPROGRAMMINGPROJECT_OUT_ROCKETCOMPONENT_H

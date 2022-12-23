@@ -8,9 +8,16 @@
 #include "LaunchPad.h"
 
 class Shed {
-    Rocket rocket;
+    Rocket* rocket;
 public:
     void moveRocketToLaunchPad(LaunchPad& launchPad) {};
+
+    void resetBuilding() {
+        delete rocket;
+        rocket = new Rocket();
+    }
+
+
 };
 
 #endif //ABSTRACTPROGRAMMINGPROJECT_OUT_SHED_H

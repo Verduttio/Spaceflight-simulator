@@ -7,8 +7,8 @@
 
 #include <vector>
 #include <map>
-#include "Engine.h"
-#include "FuelTank.h"
+#include "core/rocket/engine/Engine.h"
+#include "core/rocket/fuelTank/FuelTank.h"
 #include "MountSide.h"
 
 class RocketStage {
