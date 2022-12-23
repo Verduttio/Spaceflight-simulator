@@ -1,10 +1,10 @@
 #include <iostream>
 #include <cassert>
-#include "core/rocket/engine/EngineDirector.h"
-#include "core/rocket/engine/EngineBuilder.h"
-#include "core/rocket/Rocket.h"
-#include "core/rocket/fuelTank/FuelTankDirector.h"
-#include "core/rocket/fuelTank/FuelTankBuilder.h"
+#include "../core/rocket/engine/EngineDirector.h"
+#include "../core/rocket/engine/EngineBuilder.h"
+#include "../core/rocket/Rocket.h"
+#include "../core/rocket/fuelTank/FuelTankDirector.h"
+#include "../core/rocket/fuelTank/FuelTankBuilder.h"
 
 void TEST_BUILDING_RaptorEngine() {
     auto* director = new EngineDirector();
