@@ -12,12 +12,16 @@ class FuelTankBuilder : public IFuelTankBuilder {
     FuelTank* fuelTank;
 public:
     void reset() override {
-        if(fuelTank != nullptr) delete fuelTank;
+        delete fuelTank;
+        fuelTank = new FuelTank();
+    }
+
+    void initFuelTankSpace() {
         fuelTank = new FuelTank();
     }
 
     FuelTankBuilder() {
-        this->reset();
+        fuelTank = new FuelTank();
     }
 
     void setFuelAmount(double _fuelAmount) override {

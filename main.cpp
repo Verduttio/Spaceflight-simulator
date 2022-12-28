@@ -1,11 +1,20 @@
-//#include <boost/filesystem/operations.hpp>
 #include <iostream>
+#include "core/places/Shed.h"
 
 int main(int argc, char *argv[]) {
-//    std::cout << "The size of " << boost::filesystem::absolute(argv[0])
-//              << " is " << boost::filesystem::file_size(argv[0]) << '\n';
-//
-    std::cout << "Hello world ;)" << std::endl;
-    std::cout << "It works, finally..." << std::endl;
+    Shed shed;
+
+    shed.buildRocketStageSmall();
+    shed.buildRocketStageSmall();
+    shed.buildRocketStageBig();
+
+
+    // Make connections
+    shed.connectRocketStages(2, MountSide::left, 0);
+    shed.connectRocketStages(2, MountSide::right, 1);
+
+    shed.drawRocketStagesASCII();
+    shed.printRocketStagesConnections();
+
     return 0;
 }

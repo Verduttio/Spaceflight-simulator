@@ -8,6 +8,7 @@
 class IEngineBuilder {
 public:
     virtual void reset() = 0;
+    virtual void initEngineSpace() = 0;
     virtual void setThrust(int) = 0;
     virtual void setMass(double) = 0;
 };

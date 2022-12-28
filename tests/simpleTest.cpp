@@ -5,6 +5,7 @@
 #include "../core/rocket/Rocket.h"
 #include "../core/rocket/fuelTank/FuelTankDirector.h"
 #include "../core/rocket/fuelTank/FuelTankBuilder.h"
+#include "../core/places/Shed.h"
 
 void TEST_BUILDING_RaptorEngine() {
     auto* director = new EngineDirector();
@@ -29,11 +30,51 @@ void TEST_BUILDING_SmallFuelTank() {
     assert(fuelTank->getMaxEngineNumberSupport() == 3);
 }
 
+void TEST_ROCKETSTAGE_Connections() {
+    Shed shed;
+
+    shed.buildRocketStageSmall();
+    shed.buildRocketStageSmall();
+    shed.buildRocketStageBig();
+
+
+    // Make connections
+    shed.connectRocketStages(2, MountSide::left, 0);
+    shed.connectRocketStages(2, MountSide::right, 1);
+
+    auto* rocketStageNo0 = shed.findRocketStage(0);
+    auto* rocketStageNo1 = shed.findRocketStage(1);
+    auto* rocketStageNo2 = shed.findRocketStage(2);
+
+    // RocketStage 0 connections
+    for(auto const& [key, val] : rocketStageNo0->getConnections()) {
+        assert(key == MountSide::right);
+        assert(val->getId() == 2);
+    }
+
+    // RocketStage 1 connections
+    for(auto const& [key, val] : rocketStageNo1->getConnections()) {
+        assert(key == MountSide::left);
+        assert(val->getId() == 2);
+    }
+
+    // RocketStage 2 connections
+    for(auto const& [key, val] : rocketStageNo2->getConnections()) {
+        assert(key == MountSide::left || key == MountSide::right);
+        if(key == MountSide::left) {
+            assert(val->getId() == 0);
+        } else if (key == MountSide::right) {
+            assert(val->getId() == 1);
+        }
+    }
+}
+
 
 
 int main() {
     TEST_BUILDING_RaptorEngine();
     TEST_BUILDING_SmallFuelTank();
+    TEST_ROCKETSTAGE_Connections();
 
     return 0;
 }

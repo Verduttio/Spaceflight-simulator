@@ -8,6 +8,7 @@
 class IFuelTankBuilder {
 public:
     virtual void reset() = 0;
+    virtual void initFuelTankSpace() = 0;
     virtual void setFuelAmount(double) = 0;
     virtual void setMaxEngineNumberSupport(int) = 0;
     virtual void setMass(double) = 0;

@@ -5,10 +5,12 @@
 #ifndef ABSTRACTPROGRAMMINGPROJECT_OUT_ROCKET_H
 #define ABSTRACTPROGRAMMINGPROJECT_OUT_ROCKET_H
 
-#include "RocketStage.h"
+#include "rocketStage/RocketStage.h"
 
 class Rocket {
-    std::vector<RocketStage> stages;
+    std::vector<RocketStage*> stages;
+
+    friend class Shed;
 };
 
 #endif //ABSTRACTPROGRAMMINGPROJECT_OUT_ROCKET_H

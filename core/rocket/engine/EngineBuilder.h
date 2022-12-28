@@ -11,12 +11,16 @@ class EngineBuilder : public IEngineBuilder {
     Engine* engine;
 public:
     void reset() override {
-        if(engine != nullptr) delete engine;
+        delete engine;
+        engine = new Engine();
+    }
+
+    void initEngineSpace() {
         engine = new Engine();
     }
 
     EngineBuilder() {
-        this->reset();
+        engine = new Engine();
     }
 
     void setThrust(int _thrust) override {

@@ -10,7 +10,7 @@
 class EngineDirector {
 public:
     void constructRaptorEngine(IEngineBuilder* engineBuilder) {
-        engineBuilder->reset();
+        engineBuilder->initEngineSpace();
         engineBuilder->setMass(1.6);
         engineBuilder->setThrust(230);
     }

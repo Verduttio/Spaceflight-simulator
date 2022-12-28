@@ -10,10 +10,17 @@
 class FuelTankDirector {
 public:
     void constructSmallFuelTank(IFuelTankBuilder* fuelTankBuilder) {
-        fuelTankBuilder->reset();
+        fuelTankBuilder->initFuelTankSpace();
         fuelTankBuilder->setMass(50);
         fuelTankBuilder->setFuelAmount(80);
         fuelTankBuilder->setMaxEngineNumberSupport(3);
+    }
+
+    void constructBigFuelTank(IFuelTankBuilder* fuelTankBuilder) {
+        fuelTankBuilder->initFuelTankSpace();
+        fuelTankBuilder->setMass(75);
+        fuelTankBuilder->setFuelAmount(120);
+        fuelTankBuilder->setMaxEngineNumberSupport(5);
     }
 };
 
