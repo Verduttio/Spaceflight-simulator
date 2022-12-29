@@ -11,7 +11,7 @@ public:
     virtual void initEngineSpace() = 0;
     virtual void setThrust(int) = 0;
     virtual void setMass(double) = 0;
-    virtual void setSpecificImpulse(double) = 0;
+    virtual void setExhaustVelocity(double) = 0;
     virtual void setMassFlowRate(double) = 0;
 };
 

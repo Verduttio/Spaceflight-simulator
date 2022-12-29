@@ -20,14 +20,14 @@ public:
         this->velocity = _velocity;
     }
 
-    double getTotalCurrentSpecificImpulse() {
-        double totalCurrentSpecificImpulse = 0;
+    double getTotalCurrentExhaustVelocity() {
+        double totalCurrentExhaustVelocity = 0;
         for (RocketStage* stage : stages) {
             for (Engine* engine : stage->getEngines()) {
-                totalCurrentSpecificImpulse += engine->getCurrentSpecificImpulse();
+                totalCurrentExhaustVelocity += engine->getCurrentExhaustVelocity();
             }
         }
-        return totalCurrentSpecificImpulse;
+        return totalCurrentExhaustVelocity;
     }
 
     void burnFuel(double seconds) {

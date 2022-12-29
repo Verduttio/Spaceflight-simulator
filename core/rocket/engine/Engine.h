@@ -10,21 +10,21 @@
 class Engine : public RocketComponent {
     double maxThrust;
     int currentPower; // in %
-    double specificImpulse;  // in m/s
+    double exhaustVelocity;  // in m/s
     double massFlowRate;  // in kg/s
 
 
 public:
-    [[nodiscard]] double getSpecificImpulse() const {
-        return this->specificImpulse;
+    [[nodiscard]] double getExhaustVelocity() const {
+        return this->exhaustVelocity;
     }
 
     [[nodiscard]] double getMassFlowRate() const {
         return this->massFlowRate;
     }
 
-    void setSpecificImpulse(double _specificImpulse) {
-        this->specificImpulse = _specificImpulse;
+    void setExhaustVelocity(double _exhaustVelocity) {
+        this->exhaustVelocity = _exhaustVelocity;
     }
 
     void setMassFlowRate(double _massFlowRate) {
@@ -47,8 +47,8 @@ public:
         return massFlowRate * currentPower / 100;
     }
 
-    [[nodiscard]] double getCurrentSpecificImpulse() const {
-        return specificImpulse * currentPower / 100;
+    [[nodiscard]] double getCurrentExhaustVelocity() const {
+        return exhaustVelocity * currentPower / 100;
     }
 
     void setCurrentPower(int _currentPower) {

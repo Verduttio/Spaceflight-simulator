@@ -22,6 +22,13 @@ public:
         fuelTankBuilder->setFuelAmount(18000);
         fuelTankBuilder->setMaxEngineNumberSupport(5);
     }
+
+    void constructStarshipFuelTank(IFuelTankBuilder* fuelTankBuilder) {
+        fuelTankBuilder->initFuelTankSpace();
+        fuelTankBuilder->setMass(85000);
+        fuelTankBuilder->setFuelAmount(40000);
+        fuelTankBuilder->setMaxEngineNumberSupport(3);
+    }
 };
 
 #endif //ABSTRACTPROGRAMMINGPROJECT_OUT_FUELTANKDIRECTOR_H

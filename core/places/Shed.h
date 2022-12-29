@@ -56,6 +56,15 @@ public:
         rocket->stages.push_back(rocketStageBuilder->getResult());
     }
 
+    void buildStarshipSecondStage() {
+        rocketStageBuilder->initRocketStageSpace();
+        rocketStageBuilder->mountStarshipFuelTank();
+        rocketStageBuilder->mountRaptorEngine();
+//        rocketStageBuilder->mountRaptorEngine();
+//        rocketStageBuilder->mountRaptorEngine();
+        rocket->stages.push_back(rocketStageBuilder->getResult());
+    }
+
     void connectRocketStages(int sourceStageId, MountSide mountSide, int destinationStageId) {
         //Connects rocket stages
         //Connects source stage to destination stage on mount side,

@@ -11,70 +11,52 @@
 #include <thread>
 #include <chrono>
 #include "../../tools/ConversionsSI.h"
+#include "../../tools/Physics.h"
 
 class MissionControl {
-    static constexpr double GRAVITATIONAL_CONSTANT = 6.67408e-11;  // in m^3 kg^-1 s^-2
     Rocket* rocket;
     Planet* planet;
 public:
     MissionControl() = default;
 
-    double calcGravityForce() {
-        return (GRAVITATIONAL_CONSTANT * planet->getMass())/pow((planet->getRadius() + rocket->getAltitude()), 2);
-    }
-
     void setEnginePower(Engine* engine) {}
     void setRocketAngle(double angle) {}
     void detachStage(RocketStage* rocketStage) {}
-
-    double calcDeltaVelocity(double deltaT, double initialMass, double finalMass) {
-        // SpecificImpulse - m/s
-        // deltaT - s
-        // initialMass - kg
-        // finalMass - kg
-
-
-        auto specificImpulse = rocket->getTotalCurrentSpecificImpulse();
-        return (specificImpulse * log(initialMass/finalMass)) - calcGravityForce()*deltaT;
-    }
-
-    double calcDeltaDistance(double deltaT, double initialVelocity, double deltaVelocity) {
-        // deltaT - s
-        // initialVelocity - m/s
-        // deltaVelocity - m/s
-
-        double acceleration = deltaVelocity/deltaT;
-        return initialVelocity*deltaT + 0.5*acceleration*pow(deltaT, 2);
-    }
 
 
     void launchRocket() {
         setPowerForAllEngines(100);
         const double deltaT = 1000;  // in ms
-
+        int flightDuration = 0;
         while(true) {
+            std::cout << "#TIME# : " << flightDuration<< " s" << std::endl;
             printRocketTelemetry();
 
             auto initialMass = rocket->calcTotalMass();
             rocket->burnFuel(deltaT/1000);
             auto finalMass = rocket->calcTotalMass();
 
-            double deltaVelocity = calcDeltaVelocity(deltaT/1000, initialMass, finalMass);
-            double deltaDistance = calcDeltaDistance(deltaT/1000, rocket->velocity, deltaVelocity);
+            double gravityAcceleration = Physics::calcGravityAcceleration(planet->getMass(), planet->getRadius(), rocket->getAltitude());
+            double deltaVelocity = Physics::calcDeltaVelocity(deltaT/1000, initialMass, finalMass, rocket->getTotalCurrentExhaustVelocity(), gravityAcceleration);
+            double deltaDistance = Physics::calcDeltaDistance(deltaT/1000, rocket->velocity, deltaVelocity);
 
             rocket->velocity += deltaVelocity;
             rocket->altitude += deltaDistance;
 
             std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(deltaT));
+            flightDuration++;
 
         }
     }
 
     void printRocketTelemetry() {
-        std::cout << "Altitude: " << ConversionSI::convertDistanceM_TO_KM(rocket->altitude) << " km" << std::endl;
-        std::cout << "Velocity: " << ConversionSI::convertVelocityMS_s_TO_KM_h(rocket->velocity) << " km/h" << std::endl;
+        std::cout << "Altitude: " << ConversionSI::convertDistanceM_TO_KM(rocket->altitude) << " km" <<
+                    " | " << rocket->altitude << " m " << std::endl;
+        std::cout << "Velocity: " << ConversionSI::convertVelocityMS_s_TO_KM_h(rocket->velocity) << " km/h" <<
+                    " | " << rocket->velocity << " m/s" << std::endl;
         std::cout << "Total mass: " << rocket->calcTotalMass() << " kg" << std::endl;
         std::cout << "Fuel mass: " << rocket->getFuelMass() << " kg" << std::endl;
+        std::cout << "Current exhaust velocity: " << rocket->getTotalCurrentExhaustVelocity() << " m/s" << std::endl;
         std::cout << "----------------------------------------" << std::endl;
     }
 

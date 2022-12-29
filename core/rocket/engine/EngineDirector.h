@@ -13,8 +13,8 @@ public:
         engineBuilder->initEngineSpace();
         engineBuilder->setMass(1600);
         engineBuilder->setThrust(185);
-//        engineBuilder->setSpecificImpulse(3210);
-        engineBuilder->setSpecificImpulse(200);
+//        engineBuilder->setExhaustVelocity(3210);
+        engineBuilder->setExhaustVelocity(3000);
         engineBuilder->setMassFlowRate(650);
     }
 };

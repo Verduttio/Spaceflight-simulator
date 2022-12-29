@@ -32,7 +32,11 @@ public:
     }
 
     void decreaseFuelAmount(double amount) {
-        this->fuelAmount -= amount;
+        if (fuelAmount - amount < 0) {
+            fuelAmount = 0;
+        } else {
+            fuelAmount -= amount;
+        }
     }
 };
 

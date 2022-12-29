@@ -6,6 +6,8 @@
 #include "../core/rocket/fuelTank/FuelTankDirector.h"
 #include "../core/rocket/fuelTank/FuelTankBuilder.h"
 #include "../core/places/Shed.h"
+#include "../tools/ConversionsSI.h"
+#include "../tools/Physics.h"
 
 void TEST_BUILDING_RaptorEngine() {
     auto* director = new EngineDirector();
@@ -15,20 +17,20 @@ void TEST_BUILDING_RaptorEngine() {
     Engine* engine = builder->getResult();
 
     assert(engine->getMaxThrust() == 185);
-    assert(engine->getMass() == 1.6);
+    assert(engine->getMass() == 1600);
 }
 
-void TEST_BUILDING_SmallFuelTank() {
-    auto* director = new FuelTankDirector();
-
-    auto* builder = new FuelTankBuilder();
-    director->constructSmallFuelTank(builder);
-    FuelTank* fuelTank = builder->getResult();
-
-    assert(fuelTank->getMass() == 50);
-    assert(fuelTank->getFuelAmount() == 80);
-    assert(fuelTank->getMaxEngineNumberSupport() == 3);
-}
+//void TEST_BUILDING_SmallFuelTank() {
+//    auto* director = new FuelTankDirector();
+//
+//    auto* builder = new FuelTankBuilder();
+//    director->constructSmallFuelTank(builder);
+//    FuelTank* fuelTank = builder->getResult();
+//
+//    assert(fuelTank->getMass() == 50);
+//    assert(fuelTank->getFuelAmount() == 80);
+//    assert(fuelTank->getMaxEngineNumberSupport() == 3);
+//}
 
 void TEST_ROCKETSTAGE_Connections() {
     Shed shed;
@@ -70,34 +72,28 @@ void TEST_ROCKETSTAGE_Connections() {
 }
 
 void TEST_CALC_EARTH_GRAVITY_ON_SURFACE() {
-    Shed shed;
-
-    shed.buildRocketStageSmall();
-    shed.buildRocketStageSmall();
-    shed.buildRocketStageBig();
-
-    // Make connections
-    shed.connectRocketStages(2, MountSide::left, 0);
-    shed.connectRocketStages(2, MountSide::right, 1);
-
-    MissionControl missionControl{};
-    shed.moveRocketToMissionControl(&missionControl);
     Planet earth(5.9722e24, 6373140);
-    missionControl.setPlanet(&earth);
 
-    auto gravityForce = missionControl.calcGravityForce();
-    double earthGravityForce = 9.81;
+    auto gravityAcceleration = Physics::calcGravityAcceleration(earth.getMass(), earth.getRadius(), 0);
+    double earthGravityAcceleration = 9.81;
 
-    assert(gravityForce - earthGravityForce < 0.01);
+    assert(gravityAcceleration - earthGravityAcceleration < 0.01);
 }
+
+void TEST_CONVERSIONS() {
+    assert(ConversionSI::convertDistanceM_TO_KM(1000) == 1);
+    assert(ConversionSI::convertVelocityMS_s_TO_KM_h(10) == 36);
+}
+
+
 
 
 
 int main() {
     TEST_BUILDING_RaptorEngine();
-    TEST_BUILDING_SmallFuelTank();
     TEST_ROCKETSTAGE_Connections();
     TEST_CALC_EARTH_GRAVITY_ON_SURFACE();
+    TEST_CONVERSIONS();
 
     return 0;
 }

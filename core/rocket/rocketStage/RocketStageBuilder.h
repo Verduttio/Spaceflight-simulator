@@ -82,6 +82,16 @@ public:
         rocketStage->setFuelTank(fuelTankBuilder->getResult());
     }
 
+    void mountStarshipFuelTank() {
+        // Check if fuel tank can be mounted
+        if(rocketStage->getFuelTank() != nullptr) {
+            throw "Fuel tank cannot be mounted! Fuel tank already mounted!";
+        }
+
+        fuelTankDirector->constructStarshipFuelTank(fuelTankBuilder);
+        rocketStage->setFuelTank(fuelTankBuilder->getResult());
+    }
+
     RocketStage* getResult() {
         return rocketStage;
     }
