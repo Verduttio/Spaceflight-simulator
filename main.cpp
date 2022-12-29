@@ -16,5 +16,16 @@ int main(int argc, char *argv[]) {
     shed.drawRocketStagesASCII();
     shed.printRocketStagesConnections();
 
+    // The rocket is stacked and ready to be moved to Mission Control
+    MissionControl missionControl{};
+    shed.moveRocketToMissionControl(&missionControl);
+    Planet earth(5.9722e24, 6373140);
+    missionControl.setPlanet(&earth);
+
+    // Launch the rocket
+    missionControl.launchRocket();
+
+
+
     return 0;
 }

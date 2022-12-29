@@ -57,8 +57,46 @@ public:
         return fuelTank;
     }
 
+    double getFuelAmount() {
+        return fuelTank->getFuelAmount();
+    }
+
     std::map<MountSide, RocketStage*> getConnections() {
         return connections;
+    }
+
+    void burnFuel(double seconds) {
+        double totalMassFlowRate = 0;
+        for (auto engine : engines) {
+            totalMassFlowRate += engine->getCurrentMassFlowRate();
+        }
+        fuelTank->decreaseFuelAmount(totalMassFlowRate * seconds);
+    }
+
+    double getEnginesMaxThrust() {
+        double maxThrust = 0;
+        for (auto engine : engines) {
+            maxThrust += engine->getMaxThrust();
+        }
+        return maxThrust;
+    }
+
+    double getEnginesCurrentThrust() {
+        double currentThrust = 0;
+        for (auto engine : engines) {
+            currentThrust += engine->getCurrentThrust();
+        }
+        return currentThrust;
+    }
+
+    double calcTotalMass() {
+        double totalMass = 0;
+        for (auto engine : engines) {
+            totalMass += engine->getMass();
+        }
+        totalMass += fuelTank->calcTotalMass();
+
+        return totalMass;
     }
 
     void printConnections() {
@@ -97,13 +135,13 @@ public:
     }
 
     void drawASCII() {
-        if(fuelTank->getMass() <= 50) {
+        if(fuelTank->getMass() <= 1000) {
             std::cout << "___" << std::endl;
             std::cout << "| |" << std::endl;
             std::cout << "| |" << std::endl;
             std::cout << "| |" << std::endl;
             std::cout << "===" << std::endl;
-        } else if (fuelTank->getMass() <= 75) {
+        } else if (fuelTank->getMass() <= 2000) {
             std::cout << "_____" << std::endl;
             std::cout << "|   |" << std::endl;
             std::cout << "|   |" << std::endl;
@@ -118,7 +156,6 @@ public:
         }
         std::cout << std::endl;
     }
-
 };
 
 #endif //ABSTRACTPROGRAMMINGPROJECT_OUT_ROCKETSTAGE_H

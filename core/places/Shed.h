@@ -5,8 +5,8 @@
 #ifndef ABSTRACTPROGRAMMINGPROJECT_OUT_SHED_H
 #define ABSTRACTPROGRAMMINGPROJECT_OUT_SHED_H
 #include "../rocket/Rocket.h"
-#include "LaunchPad.h"
 #include "../rocket/rocketStage/RocketStageBuilder.h"
+#include "MissionControl.h"
 
 class Shed {
     Rocket* rocket;
@@ -31,7 +31,9 @@ public:
         rocketStageBuilder->setFuelTankDirector(fuelTankDirector);
     }
 
-    void moveRocketToLaunchPad(LaunchPad& launchPad) {};
+    void moveRocketToMissionControl(MissionControl* missionControl) {
+        missionControl->setRocket(rocket);
+    };
 
     void resetBuilding() {
         delete rocket;
@@ -49,8 +51,8 @@ public:
         rocketStageBuilder->initRocketStageSpace();
         rocketStageBuilder->mountBigFuelTank();
         rocketStageBuilder->mountRaptorEngine();
-        rocketStageBuilder->mountRaptorEngine();
-        rocketStageBuilder->mountRaptorEngine();
+//        rocketStageBuilder->mountRaptorEngine();
+//        rocketStageBuilder->mountRaptorEngine();
         rocket->stages.push_back(rocketStageBuilder->getResult());
     }
 

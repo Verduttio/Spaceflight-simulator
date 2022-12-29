@@ -8,7 +8,7 @@
 #include "../RocketComponent.h"
 
 class FuelTank : public RocketComponent{
-    double fuelAmount;  // in tons
+    double fuelAmount;  // in kg
     int maxEngineNumberSupport;
 public:
     double calcTotalMass() {
@@ -29,6 +29,10 @@ public:
 
     [[nodiscard]] int getMaxEngineNumberSupport() const {
         return this->maxEngineNumberSupport;
+    }
+
+    void decreaseFuelAmount(double amount) {
+        this->fuelAmount -= amount;
     }
 };
 

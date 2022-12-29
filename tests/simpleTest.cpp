@@ -14,7 +14,7 @@ void TEST_BUILDING_RaptorEngine() {
     director->constructRaptorEngine(builder);
     Engine* engine = builder->getResult();
 
-    assert(engine->getThrust() == 230);
+    assert(engine->getMaxThrust() == 185);
     assert(engine->getMass() == 1.6);
 }
 
@@ -69,12 +69,35 @@ void TEST_ROCKETSTAGE_Connections() {
     }
 }
 
+void TEST_CALC_EARTH_GRAVITY_ON_SURFACE() {
+    Shed shed;
+
+    shed.buildRocketStageSmall();
+    shed.buildRocketStageSmall();
+    shed.buildRocketStageBig();
+
+    // Make connections
+    shed.connectRocketStages(2, MountSide::left, 0);
+    shed.connectRocketStages(2, MountSide::right, 1);
+
+    MissionControl missionControl{};
+    shed.moveRocketToMissionControl(&missionControl);
+    Planet earth(5.9722e24, 6373140);
+    missionControl.setPlanet(&earth);
+
+    auto gravityForce = missionControl.calcGravityForce();
+    double earthGravityForce = 9.81;
+
+    assert(gravityForce - earthGravityForce < 0.01);
+}
+
 
 
 int main() {
     TEST_BUILDING_RaptorEngine();
     TEST_BUILDING_SmallFuelTank();
     TEST_ROCKETSTAGE_Connections();
+    TEST_CALC_EARTH_GRAVITY_ON_SURFACE();
 
     return 0;
 }

@@ -8,15 +8,55 @@
 #include "../RocketComponent.h"
 
 class Engine : public RocketComponent {
-    int thrust;
+    double maxThrust;
+    int currentPower; // in %
+    double specificImpulse;  // in m/s
+    double massFlowRate;  // in kg/s
+
 
 public:
-    void setThrust(int _thrust) {
-        this->thrust = _thrust;
+    [[nodiscard]] double getSpecificImpulse() const {
+        return this->specificImpulse;
     }
 
-    [[nodiscard]] int getThrust() const {
-        return thrust;
+    [[nodiscard]] double getMassFlowRate() const {
+        return this->massFlowRate;
+    }
+
+    void setSpecificImpulse(double _specificImpulse) {
+        this->specificImpulse = _specificImpulse;
+    }
+
+    void setMassFlowRate(double _massFlowRate) {
+        this->massFlowRate = _massFlowRate;
+    }
+
+    void setMaxThrust(double _maxThrust) {
+        this->maxThrust = _maxThrust;
+    }
+
+    [[nodiscard]] double getMaxThrust() const {
+        return maxThrust;
+    }
+
+    [[nodiscard]] double getCurrentThrust() const {
+        return maxThrust * currentPower / 100;
+    }
+
+    [[nodiscard]] double getCurrentMassFlowRate() const {
+        return massFlowRate * currentPower / 100;
+    }
+
+    [[nodiscard]] double getCurrentSpecificImpulse() const {
+        return specificImpulse * currentPower / 100;
+    }
+
+    void setCurrentPower(int _currentPower) {
+        this->currentPower = _currentPower;
+    }
+
+    [[nodiscard]] int getCurrentPower() const {
+        return currentPower;
     }
 };
 

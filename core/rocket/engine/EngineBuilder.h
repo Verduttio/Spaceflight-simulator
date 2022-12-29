@@ -24,11 +24,19 @@ public:
     }
 
     void setThrust(int _thrust) override {
-        engine->setThrust(_thrust);
+        engine->setMaxThrust(_thrust);
     }
 
     void setMass(double _mass) override {
         engine->setMass(_mass);
+    }
+
+    void setSpecificImpulse(double _specificImpulse) override {
+        engine->setSpecificImpulse(_specificImpulse);
+    }
+
+    void setMassFlowRate(double _massFlowRate) override {
+        engine->setMassFlowRate(_massFlowRate);
     }
 
     Engine* getResult() {

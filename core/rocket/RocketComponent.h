@@ -9,7 +9,7 @@ class RocketComponent {
 protected:
     // Raw component's mass
     // without any additional objects like fuel.
-    double mass;
+    double mass;    // in kg
 public:
     void setMass(double _mass) {
         this->mass = _mass;
