@@ -49,6 +49,59 @@ public:
     }
 
     void mountRaptorEngine() {
+        checkEngineMountPermission();
+
+        engineDirector->constructRaptorEngine(engineBuilder);
+        rocketStage->addEngine(engineBuilder->getResult());
+    }
+
+    void mountMerlinEngine() {
+        checkEngineMountPermission();
+
+        engineDirector->constructMerlinEngine(engineBuilder);
+        rocketStage->addEngine(engineBuilder->getResult());
+    }
+
+    void mountSpecificEngine(double mass, double exhaustVelocity, double massFlowRate) {
+        checkEngineMountPermission();
+
+        engineDirector->constructSpecificEngine(engineBuilder, mass, exhaustVelocity, massFlowRate);
+        rocketStage->addEngine(engineBuilder->getResult());
+    }
+
+    void mountSmallFuelTank() {
+        checkFuelTankMountPermission();
+
+        fuelTankDirector->constructSmallFuelTank(fuelTankBuilder);
+        rocketStage->setFuelTank(fuelTankBuilder->getResult());
+    }
+
+    void mountBigFuelTank() {
+        checkFuelTankMountPermission();
+
+        fuelTankDirector->constructBigFuelTank(fuelTankBuilder);
+        rocketStage->setFuelTank(fuelTankBuilder->getResult());
+    }
+
+    void mountStarshipFuelTank() {
+        checkFuelTankMountPermission();
+
+        fuelTankDirector->constructStarshipFuelTank(fuelTankBuilder);
+        rocketStage->setFuelTank(fuelTankBuilder->getResult());
+    }
+
+    void mountSpecificFuelTank(double mass, double fuelAmount, int maxEngineNumberSupport) {
+        checkFuelTankMountPermission();
+
+        fuelTankDirector->constructSpecificFuelTank(fuelTankBuilder, mass, fuelAmount, maxEngineNumberSupport);
+        rocketStage->setFuelTank(fuelTankBuilder->getResult());
+    }
+
+    RocketStage* getResult() {
+        return rocketStage;
+    }
+private:
+    void checkEngineMountPermission() {
         if(rocketStage->getFuelTank() == nullptr) {
             throw "Fuel tank not mounted! Mount fuel tank first before mounting engine!";
         }
@@ -57,43 +110,12 @@ public:
         if(rocketStage->getFuelTank()->getMaxEngineNumberSupport() <= rocketStage->getEngineNumber()) {
             throw "Engine cannot be mounted! Maximum engine number support reached!";
         }
-
-        engineDirector->constructRaptorEngine(engineBuilder);
-        rocketStage->addEngine(engineBuilder->getResult());
     }
 
-    void mountSmallFuelTank() {
-        // Check if fuel tank can be mounted
+    void checkFuelTankMountPermission() {
         if(rocketStage->getFuelTank() != nullptr) {
             throw "Fuel tank cannot be mounted! Fuel tank already mounted!";
         }
-
-        fuelTankDirector->constructSmallFuelTank(fuelTankBuilder);
-        rocketStage->setFuelTank(fuelTankBuilder->getResult());
-    }
-
-    void mountBigFuelTank() {
-        // Check if fuel tank can be mounted
-        if(rocketStage->getFuelTank() != nullptr) {
-            throw "Fuel tank cannot be mounted! Fuel tank already mounted!";
-        }
-
-        fuelTankDirector->constructBigFuelTank(fuelTankBuilder);
-        rocketStage->setFuelTank(fuelTankBuilder->getResult());
-    }
-
-    void mountStarshipFuelTank() {
-        // Check if fuel tank can be mounted
-        if(rocketStage->getFuelTank() != nullptr) {
-            throw "Fuel tank cannot be mounted! Fuel tank already mounted!";
-        }
-
-        fuelTankDirector->constructStarshipFuelTank(fuelTankBuilder);
-        rocketStage->setFuelTank(fuelTankBuilder->getResult());
-    }
-
-    RocketStage* getResult() {
-        return rocketStage;
     }
 
 };

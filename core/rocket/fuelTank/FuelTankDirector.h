@@ -29,6 +29,13 @@ public:
         fuelTankBuilder->setFuelAmount(40000);
         fuelTankBuilder->setMaxEngineNumberSupport(3);
     }
+
+    void constructSpecificFuelTank(IFuelTankBuilder* fuelTankBuilder, double mass, double fuelAmount, int maxEngineNumberSupport) {
+        fuelTankBuilder->initFuelTankSpace();
+        fuelTankBuilder->setMass(mass);
+        fuelTankBuilder->setFuelAmount(fuelAmount);
+        fuelTankBuilder->setMaxEngineNumberSupport(maxEngineNumberSupport);
+    }
 };
 
 #endif //ABSTRACTPROGRAMMINGPROJECT_OUT_FUELTANKDIRECTOR_H

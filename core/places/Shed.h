@@ -65,6 +65,27 @@ public:
         rocket->stages.push_back(rocketStageBuilder->getResult());
     }
 
+    void buildSpecificRocketStage(double mass, double fuelAmount, int maxEngineNumberSupport, const std::string& engineType, int engineNumber) {
+        rocketStageBuilder->initRocketStageSpace();
+        rocketStageBuilder->mountSpecificFuelTank(mass, fuelAmount, maxEngineNumberSupport);
+        for (int i = 0; i < engineNumber; i++) {
+            if (engineType == "Raptor") {
+                rocketStageBuilder->mountRaptorEngine();
+            } else {
+                throw "Engine type not supported";
+            }
+        }
+        rocket->stages.push_back(rocketStageBuilder->getResult());
+    }
+
+    void mountRocketStage(RocketStage* rocketStage) {
+        rocket->stages.push_back(rocketStage);
+    }
+
+    RocketStageBuilder* getRocketStageBuilder() {
+        return rocketStageBuilder;
+    }
+
     void connectRocketStages(int sourceStageId, MountSide mountSide, int destinationStageId) {
         //Connects rocket stages
         //Connects source stage to destination stage on mount side,

@@ -8,7 +8,21 @@ int main(int argc, char *argv[]) {
 //    shed.buildRocketStageSmall();
 //    shed.buildRocketStageBig();
 
-    shed.buildStarshipSecondStage();
+    //shed.buildStarshipSecondStage();
+    auto* rocketStageBuilder = shed.getRocketStageBuilder();
+    rocketStageBuilder->initRocketStageSpace();
+    rocketStageBuilder->mountSpecificFuelTank(50000, 395700, 9);
+//    rocketStageBuilder->mountSpecificEngine(1600, 2400, 650);
+    rocketStageBuilder->mountMerlinEngine();
+    rocketStageBuilder->mountMerlinEngine();
+    rocketStageBuilder->mountMerlinEngine();
+//    rocketStageBuilder->mountMerlinEngine();
+//    rocketStageBuilder->mountMerlinEngine();
+//    rocketStageBuilder->mountMerlinEngine();
+//    rocketStageBuilder->mountMerlinEngine();
+//    rocketStageBuilder->mountMerlinEngine();
+//    rocketStageBuilder->mountMerlinEngine();
+    shed.mountRocketStage(rocketStageBuilder->getResult());
 
 
     // Make connections

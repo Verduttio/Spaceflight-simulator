@@ -148,6 +148,13 @@ public:
             std::cout << "|   |" << std::endl;
             std::cout << "|   |" << std::endl;
             std::cout << "=====" << std::endl;
+        } else {
+            std::cout << "______" << std::endl;
+            std::cout << "|    |" << std::endl;
+            std::cout << "|    |" << std::endl;
+            std::cout << "|    |" << std::endl;
+            std::cout << "|    |" << std::endl;
+            std::cout << "======" << std::endl;
         }
 
         // Draw engines
