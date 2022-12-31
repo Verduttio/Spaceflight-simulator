@@ -30,6 +30,16 @@ public:
         return totalCurrentExhaustVelocity;
     }
 
+    double getTotalCurrentMassFlowRate() {
+        double totalCurrentMassFlowRate = 0;
+        for (RocketStage* stage : stages) {
+            for (Engine* engine : stage->getEngines()) {
+                totalCurrentMassFlowRate += engine->getCurrentMassFlowRate();
+            }
+        }
+        return totalCurrentMassFlowRate;
+    }
+
     void burnFuel(double seconds) {
         for (auto stage : stages) {
             stage->burnFuel(seconds);

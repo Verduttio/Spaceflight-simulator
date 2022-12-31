@@ -24,10 +24,11 @@ public:
     void detachStage(RocketStage* rocketStage) {}
 
 
-    void launchRocket() {
+    [[noreturn]] void launchRocket() {
         setPowerForAllEngines(100);
         const double deltaT = 1000;  // in ms
         int flightDuration = 0;
+        double maxFuel = rocket->getFuelMass();
         while(true) {
             std::cout << "#TIME# : " << flightDuration<< " s" << std::endl;
             printRocketTelemetry();
@@ -40,8 +41,26 @@ public:
             double deltaVelocity = Physics::calcDeltaVelocity(deltaT/1000, initialMass, finalMass, rocket->getTotalCurrentExhaustVelocity(), gravityAcceleration);
             double deltaDistance = Physics::calcDeltaDistance(deltaT/1000, rocket->velocity, deltaVelocity);
 
-            rocket->velocity += deltaVelocity;
-            rocket->altitude += deltaDistance;
+            std::cout << "Acceleration by velocity: " << Physics::calcAccelerationByVelocity(deltaVelocity, deltaT/1000) << " m/s^2" << std::endl;
+
+            // Calculate rocket acceleration by thrust and weight
+            double weight = Physics::calcWeight(rocket->calcTotalMass(), gravityAcceleration);
+            double resultantForce = Physics::calcResultantForce(rocket->getEnginesCurrentThrust(), weight);
+            std::cout << "Current thrust: " << rocket->getEnginesCurrentThrust() << " N" << std::endl;
+            std::cout  << "Weight: " << weight << " N" << std::endl;
+            std::cout << "Thrust to weight ratio: " << rocket->getEnginesCurrentThrust() / weight << std::endl;
+            std::cout << "Resultant force: " << resultantForce << " N" << std::endl;
+            double acceleration = Physics::calcAccelerationByForce(resultantForce, rocket->calcTotalMass());
+            std::cout << "Acceleration by thrust: " << acceleration << " m/s^2" << std::endl;
+            std::cout << "Fuel amount in %: " << rocket->getFuelMass() / maxFuel * 100 << " % " << std::endl;
+
+            std::cout << "----------------------------------------" << std::endl;
+            //            rocket->altitude += deltaDistance;
+            rocket->altitude += rocket->velocity * deltaT/1000 + 0.5 * acceleration * pow(deltaT/1000, 2);
+//            rocket->velocity += deltaVelocity;
+            rocket->velocity += acceleration * deltaT/1000;
+
+
 
             std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(deltaT));
             flightDuration++;
@@ -57,7 +76,7 @@ public:
         std::cout << "Total mass: " << rocket->calcTotalMass() << " kg" << std::endl;
         std::cout << "Fuel mass: " << rocket->getFuelMass() << " kg" << std::endl;
         std::cout << "Current exhaust velocity: " << rocket->getTotalCurrentExhaustVelocity() << " m/s" << std::endl;
-        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "Current mass flow rate: " << rocket->getTotalCurrentMassFlowRate() << " kg/s" << std::endl;
     }
 
     void setPowerForAllEngines(int power) {

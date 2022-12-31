@@ -21,15 +21,17 @@ public:
     void constructMerlinEngine(IEngineBuilder* engineBuilder) {
         engineBuilder->initEngineSpace();
         engineBuilder->setMass(470);
-        engineBuilder->setExhaustVelocity(2700);
-        engineBuilder->setMassFlowRate(260);
+        engineBuilder->setThrust(653720);  // in Newtons
+        engineBuilder->setExhaustVelocity(2770);
+        engineBuilder->setMassFlowRate(236);
     }
 
-    void constructSpecificEngine(IEngineBuilder* engineBuilder, double mass, double exhaustVelocity, double massFlowRate) {
+    void constructSpecificEngine(IEngineBuilder* engineBuilder, double mass, double thrust, double exhaustVelocity) {
         engineBuilder->initEngineSpace();
         engineBuilder->setMass(mass);
+        engineBuilder->setThrust(thrust);
         engineBuilder->setExhaustVelocity(exhaustVelocity);
-        engineBuilder->setMassFlowRate(massFlowRate);
+        engineBuilder->setMassFlowRate(thrust/ exhaustVelocity);
     }
 };
 

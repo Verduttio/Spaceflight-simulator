@@ -34,6 +34,22 @@ public:
     static double calcGravityAcceleration(double planetMass, double planetRadius, double rocketAltitude) {
         return (GRAVITATIONAL_CONSTANT * planetMass)/pow((planetRadius + rocketAltitude), 2);
     }
+
+    static double calcAccelerationByVelocity(double deltaVelocity, double deltaT) {
+        return deltaVelocity / deltaT;
+    }
+
+    static double calcWeight(double rocketMass, double gravityAcceleration) {
+        return rocketMass * gravityAcceleration;
+    }
+
+    static double calcResultantForce(double thrust, double weight) {
+        return thrust - weight;
+    }
+
+    static double calcAccelerationByForce(double force, double mass) {
+        return force / mass;
+    }
 };
 
 #endif //ABSTRACTPROGRAMMINGPROJECT_OUT_PHYSICS_H
