@@ -59,6 +59,17 @@ public:
         return totalMass;
     }
 
+    //TODO: We assume here that all engines have the same power set,
+    //      which in the future, might not be true.
+    double getEnginesCurrentPower(){
+        // Very bad way of doing this, but it works for now.
+        for (auto stage : stages) {
+            for (auto engine : stage->getEngines()) {
+                return engine->getCurrentPower();
+            }
+        }
+    }
+
     double getFuelMass() {
         double totalFuelMass = 0;
         for (auto stage : stages) {
