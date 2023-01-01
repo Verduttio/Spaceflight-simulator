@@ -10,14 +10,15 @@
 class Rocket {
     std::vector<RocketStage*> stages;
     double angle;  // in degrees [-180, 180]
-    double velocity;  // in m/s
+    double velocityY;  // in m/s
+    double velocityX;  // in m/s
     double altitude;  // in m
 
     friend class Shed;
     friend class MissionControl;
 public:
-    void setVelocity(double _velocity) {
-        this->velocity = _velocity;
+    void setVelocityY(double _velocity) {
+        this->velocityY = _velocity;
     }
 
     double getTotalCurrentExhaustVelocity() {

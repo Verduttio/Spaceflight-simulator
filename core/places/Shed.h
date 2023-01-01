@@ -65,6 +65,13 @@ public:
         rocket->stages.push_back(rocketStageBuilder->getResult());
     }
 
+    void buildSpaceFlightSimulatorTestRocket() {
+        rocketStageBuilder->initRocketStageSpace();
+        rocketStageBuilder->mountSpecificFuelTank(2000*4, 18000*4, 1);
+        rocketStageBuilder->mountSpecificEngine(3500+4400, 120000*9.81 ,240*9.81);
+        rocket->stages.push_back(rocketStageBuilder->getResult());
+    }
+
     void buildSpecificRocketStage(double mass, double fuelAmount, int maxEngineNumberSupport, const std::string& engineType, int engineNumber) {
         rocketStageBuilder->initRocketStageSpace();
         rocketStageBuilder->mountSpecificFuelTank(mass, fuelAmount, maxEngineNumberSupport);

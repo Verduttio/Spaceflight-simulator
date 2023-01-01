@@ -82,6 +82,10 @@ public:
     }
 
     double getEnginesCurrentThrust() {
+        if(getFuelAmount() <= 0) {
+            return 0;
+        }
+
         double currentThrust = 0;
         for (auto engine : engines) {
             currentThrust += engine->getCurrentThrust();
