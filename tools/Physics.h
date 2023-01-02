@@ -120,6 +120,29 @@ public:
     static double calcDeltaDistanceInUniformlyAcceleratedMotion(double initialVelocity, double acceleration, double deltaT) {
         return initialVelocity * deltaT + 0.5 * acceleration * pow(deltaT, 2);
     }
+
+    static double calcPlanetCurvatureOverDistance(double planetRadius, double distanceTraveled) {
+        // https://earthcurvature.com/
+        // Finds the height which is the drop in curvature over the distance traveled
+
+        double circumference = 2 * PI * planetRadius;           // in m
+        double oneMeterAngle = 360 / circumference;             // in degrees
+        double angle = oneMeterAngle * distanceTraveled;        // in degrees
+        double heightDrop = planetRadius * (1 - cos(convertDegreesToRadians(angle)));  // in m
+        return heightDrop;
+    }
+
+    static double calcCentrifugalForce(double mass, double velocity, double radius) {
+        // https://en.wikipedia.org/wiki/Centrifugal_force
+        // Fc = m * v^2 / r
+        return mass * pow(velocity, 2) / radius;
+    }
+
+    static double calcCentrifugalAcceleration(double velocity, double radius) {
+        // https://en.wikipedia.org/wiki/Centrifugal_force
+        // ac = v^2 / r
+        return pow(velocity, 2) / radius;
+    }
 };
 
 #endif //ABSTRACTPROGRAMMINGPROJECT_OUT_PHYSICS_H
