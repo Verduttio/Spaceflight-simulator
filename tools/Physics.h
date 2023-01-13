@@ -34,6 +34,10 @@ public:
         return force / mass;
     }
 
+    static double calcForce(double mass, double acceleration) {
+        return mass * acceleration;
+    }
+
     static double convertDegreesToRadians(double degrees) {
         return degrees * PI / 180;
     }

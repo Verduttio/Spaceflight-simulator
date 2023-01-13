@@ -61,6 +61,18 @@ public:
         return fuelTank->getFuelAmount();
     }
 
+    double getCurrentMassFlowRate() {
+        if (fuelTank->getFuelAmount() == 0) {
+            return 0;
+        }
+
+        double massFlowRate = 0;
+        for (auto engine : engines) {
+            massFlowRate += engine->getCurrentMassFlowRate();
+        }
+        return massFlowRate;
+    }
+
     std::map<MountSide, RocketStage*> getConnections() {
         return connections;
     }

@@ -40,12 +40,14 @@ int main(int argc, char *argv[]) {
     // The rocket is stacked and ready to be moved to Mission Control
     MissionControl missionControl{};
     shed.moveRocketToMissionControl(&missionControl);
+    double deltaT_ms = 1000;
+    missionControl.setMissionControl(deltaT_ms);
     Planet earth(Physics::EARTH_MASS, Physics::EARTH_RADIUS);
     missionControl.setPlanet(&earth);
 
     // Launch the rocket
-    missionControl.launchRocket();
-//    missionControl.launchRocketSimulation();
+//    missionControl.launchRocket();
+    missionControl.launchRocketSimulation();
 
 
 

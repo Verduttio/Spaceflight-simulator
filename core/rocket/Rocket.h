@@ -12,8 +12,14 @@ class Rocket {
     double angle;  // in degrees [-180, 180]
     double velocityR;  // in m/s
     double velocityPhi;  // in m/s
+    double accelerationR;  // in m/s^2
+    double accelerationPhi;  // in m/s^2
+
+    // These two are used to determine the position of the rocket in space (2-dimensional) by X and Y values (in meters).
+    // X and Y values are calculated by transforming the polar coordinates (angle, radius) to cartesian coordinates (X, Y).
+    // In our case angle is anglePhi and radius is altitude + planetRadius.
     double altitude;  // in m
-    double anglePhi;
+    double anglePhi;  // in radians!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     friend class Shed;
     friend class MissionControl;
@@ -22,22 +28,10 @@ public:
         this->velocityR = _velocity;
     }
 
-//    double getTotalCurrentExhaustVelocity() {
-//        double totalCurrentExhaustVelocity = 0;
-//        for (RocketStage* stage : stages) {
-//            for (Engine* engine : stage->getEngines()) {
-//                totalCurrentExhaustVelocity += engine->getCurrentExhaustVelocity();
-//            }
-//        }
-//        return totalCurrentExhaustVelocity;
-//    }
-
     double getTotalCurrentMassFlowRate() {
         double totalCurrentMassFlowRate = 0;
         for (RocketStage* stage : stages) {
-            for (Engine* engine : stage->getEngines()) {
-                totalCurrentMassFlowRate += engine->getCurrentMassFlowRate();
-            }
+            totalCurrentMassFlowRate += stage->getCurrentMassFlowRate();
         }
         return totalCurrentMassFlowRate;
     }
@@ -63,7 +57,7 @@ public:
     //TODO: We assume here that all engines have the same power set,
     //      which in the future, might not be true.
     double getEnginesCurrentPower(){
-        // Very bad way of doing this, but it works for now.
+        // Very bad way of doing this, but it is good for now.
         for (auto stage : stages) {
             for (auto engine : stage->getEngines()) {
                 return engine->getCurrentPower();
@@ -78,14 +72,6 @@ public:
         }
         return totalFuelMass;
     }
-
-//    double getEnginesMaxThrust() {
-//        double maxThrust = 0;
-//        for (auto stage : stages) {
-//            maxThrust += stage->getEnginesMaxThrust();
-//        }
-//        return maxThrust;
-//    }
 
     double getEnginesCurrentThrust(double gravityAcc) {
         double currentThrust = 0;
