@@ -10,26 +10,27 @@
 class Rocket {
     std::vector<RocketStage*> stages;
     double angle;  // in degrees [-180, 180]
-    double velocityY;  // in m/s
-    double velocityX;  // in m/s
+    double velocityR;  // in m/s
+    double velocityPhi;  // in m/s
     double altitude;  // in m
+    double anglePhi;
 
     friend class Shed;
     friend class MissionControl;
 public:
-    void setVelocityY(double _velocity) {
-        this->velocityY = _velocity;
+    void setVelocityR(double _velocity) {
+        this->velocityR = _velocity;
     }
 
-    double getTotalCurrentExhaustVelocity() {
-        double totalCurrentExhaustVelocity = 0;
-        for (RocketStage* stage : stages) {
-            for (Engine* engine : stage->getEngines()) {
-                totalCurrentExhaustVelocity += engine->getCurrentExhaustVelocity();
-            }
-        }
-        return totalCurrentExhaustVelocity;
-    }
+//    double getTotalCurrentExhaustVelocity() {
+//        double totalCurrentExhaustVelocity = 0;
+//        for (RocketStage* stage : stages) {
+//            for (Engine* engine : stage->getEngines()) {
+//                totalCurrentExhaustVelocity += engine->getCurrentExhaustVelocity();
+//            }
+//        }
+//        return totalCurrentExhaustVelocity;
+//    }
 
     double getTotalCurrentMassFlowRate() {
         double totalCurrentMassFlowRate = 0;
@@ -78,18 +79,18 @@ public:
         return totalFuelMass;
     }
 
-    double getEnginesMaxThrust() {
-        double maxThrust = 0;
-        for (auto stage : stages) {
-            maxThrust += stage->getEnginesMaxThrust();
-        }
-        return maxThrust;
-    }
+//    double getEnginesMaxThrust() {
+//        double maxThrust = 0;
+//        for (auto stage : stages) {
+//            maxThrust += stage->getEnginesMaxThrust();
+//        }
+//        return maxThrust;
+//    }
 
-    double getEnginesCurrentThrust() {
+    double getEnginesCurrentThrust(double gravityAcc) {
         double currentThrust = 0;
         for (auto stage : stages) {
-            currentThrust += stage->getEnginesCurrentThrust();
+            currentThrust += stage->getEnginesCurrentThrust(gravityAcc);
         }
         return currentThrust;
     }

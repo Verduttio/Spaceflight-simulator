@@ -8,47 +8,38 @@
 #include "../RocketComponent.h"
 
 class Engine : public RocketComponent {
-    double maxThrust;
     int currentPower; // in %
-    double exhaustVelocity;  // in m/s
+    double specificImpulse;  // in m/s
     double massFlowRate;  // in kg/s
 
 
 public:
-    [[nodiscard]] double getExhaustVelocity() const {
-        return this->exhaustVelocity;
+    [[nodiscard]] double getspecificImpulse() const {
+        return this->specificImpulse;
     }
 
     [[nodiscard]] double getMassFlowRate() const {
         return this->massFlowRate;
     }
 
-    void setExhaustVelocity(double _exhaustVelocity) {
-        this->exhaustVelocity = _exhaustVelocity;
+    void setSpecificImpulse(double _specificImpulse) {
+        this->specificImpulse = _specificImpulse;
     }
 
     void setMassFlowRate(double _massFlowRate) {
         this->massFlowRate = _massFlowRate;
     }
 
-    void setMaxThrust(double _maxThrust) {
-        this->maxThrust = _maxThrust;
-    }
-
-    [[nodiscard]] double getMaxThrust() const {
-        return maxThrust;
-    }
-
-    [[nodiscard]] double getCurrentThrust() const {
-        return maxThrust * currentPower / 100;
+    [[nodiscard]] double getCurrentThrust(double gravityAcc) const {
+        return gravityAcc * specificImpulse * massFlowRate * (currentPower / 100.0);
     }
 
     [[nodiscard]] double getCurrentMassFlowRate() const {
         return massFlowRate * currentPower / 100;
     }
 
-    [[nodiscard]] double getCurrentExhaustVelocity() const {
-        return exhaustVelocity * currentPower / 100;
+    [[nodiscard]] double getCurrentSpecificImpulse() const {
+        return specificImpulse * currentPower / 100;
     }
 
     void setCurrentPower(int _currentPower) {

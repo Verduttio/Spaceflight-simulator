@@ -73,22 +73,22 @@ public:
         fuelTank->decreaseFuelAmount(totalMassFlowRate * seconds);
     }
 
-    double getEnginesMaxThrust() {
-        double maxThrust = 0;
-        for (auto engine : engines) {
-            maxThrust += engine->getMaxThrust();
-        }
-        return maxThrust;
-    }
+//    double getEnginesMaxThrust() {
+//        double maxThrust = 0;
+//        for (auto engine : engines) {
+//            maxThrust += engine->getMaxThrust();
+//        }
+//        return maxThrust;
+//    }
 
-    double getEnginesCurrentThrust() {
+    double getEnginesCurrentThrust(double gravityAcc) {
         if(getFuelAmount() <= 0) {
             return 0;
         }
 
         double currentThrust = 0;
         for (auto engine : engines) {
-            currentThrust += engine->getCurrentThrust();
+            currentThrust += engine->getCurrentThrust(gravityAcc);
         }
         return currentThrust;
     }

@@ -55,17 +55,17 @@ public:
         rocketStage->addEngine(engineBuilder->getResult());
     }
 
-    void mountMerlinEngine() {
+//    void mountMerlinEngine() {
+//        checkEngineMountPermission();
+//
+//        engineDirector->constructMerlinEngine(engineBuilder);
+//        rocketStage->addEngine(engineBuilder->getResult());
+//    }
+
+    void mountSpecificEngine(double mass, double specificImpulse, double massFlowRate) {
         checkEngineMountPermission();
 
-        engineDirector->constructMerlinEngine(engineBuilder);
-        rocketStage->addEngine(engineBuilder->getResult());
-    }
-
-    void mountSpecificEngine(double mass, double thrust, double exhaustVelocity) {
-        checkEngineMountPermission();
-
-        engineDirector->constructSpecificEngine(engineBuilder, mass, thrust, exhaustVelocity);
+        engineDirector->constructSpecificEngine(engineBuilder, mass, specificImpulse, massFlowRate);
         rocketStage->addEngine(engineBuilder->getResult());
     }
 

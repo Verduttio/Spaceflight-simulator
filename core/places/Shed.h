@@ -68,7 +68,12 @@ public:
     void buildSpaceFlightSimulatorTestRocket() {
         rocketStageBuilder->initRocketStageSpace();
         rocketStageBuilder->mountSpecificFuelTank(2000*4, 18000*4, 1);
-        rocketStageBuilder->mountSpecificEngine(3500+4400, 120000*9.81 ,240*9.81);
+//        rocketStageBuilder->mountSpecificFuelTank(2000*4, 18000*8, 1);
+//        rocketStageBuilder->mountSpecificFuelTank(2000000, 0, 1);
+        rocketStageBuilder->mountSpecificEngine(3500+4400, 240, (120*1000)/(240.0));
+//        rocketStageBuilder->mountSpecificEngine(3500+4400, 500, (120*1000)/(240.0));
+//        rocketStageBuilder->mountSpecificEngine(0, 500, (120*1000)/(240.0));
+
         rocket->stages.push_back(rocketStageBuilder->getResult());
     }
 

@@ -12,26 +12,23 @@ public:
     void constructRaptorEngine(IEngineBuilder* engineBuilder) {
         engineBuilder->initEngineSpace();
         engineBuilder->setMass(1600);
-        engineBuilder->setThrust(185);
-//        engineBuilder->setExhaustVelocity(3210);
-        engineBuilder->setExhaustVelocity(3000);
+        engineBuilder->setSpecificImpulse(340);
         engineBuilder->setMassFlowRate(650);
     }
 
-    void constructMerlinEngine(IEngineBuilder* engineBuilder) {
-        engineBuilder->initEngineSpace();
-        engineBuilder->setMass(470);
-        engineBuilder->setThrust(653720);  // in Newtons
-        engineBuilder->setExhaustVelocity(2770);
-        engineBuilder->setMassFlowRate(236);
-    }
+//    void constructMerlinEngine(IEngineBuilder* engineBuilder) {
+//        engineBuilder->initEngineSpace();
+//        engineBuilder->setMass(470);
+//        engineBuilder->setThrust(653720);  // in Newtons
+//        engineBuilder->setExhaustVelocity(2770);
+//        engineBuilder->setMassFlowRate(236);
+//    }
 
-    void constructSpecificEngine(IEngineBuilder* engineBuilder, double mass, double thrust, double exhaustVelocity) {
+    void constructSpecificEngine(IEngineBuilder* engineBuilder, double mass, double specificImpulse, double massFlowRate) {
         engineBuilder->initEngineSpace();
         engineBuilder->setMass(mass);
-        engineBuilder->setThrust(thrust);
-        engineBuilder->setExhaustVelocity(exhaustVelocity);
-        engineBuilder->setMassFlowRate(thrust/ exhaustVelocity);
+        engineBuilder->setSpecificImpulse(specificImpulse);
+        engineBuilder->setMassFlowRate(massFlowRate);
     }
 };
 

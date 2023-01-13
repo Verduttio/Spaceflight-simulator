@@ -45,6 +45,7 @@ int main(int argc, char *argv[]) {
 
     // Launch the rocket
     missionControl.launchRocket();
+//    missionControl.launchRocketSimulation();
 
 
 

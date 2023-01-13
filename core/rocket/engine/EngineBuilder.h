@@ -23,16 +23,12 @@ public:
         engine = new Engine();
     }
 
-    void setThrust(int _thrust) override {
-        engine->setMaxThrust(_thrust);
-    }
-
     void setMass(double _mass) override {
         engine->setMass(_mass);
     }
 
-    void setExhaustVelocity(double _exhaustVelocity) override {
-        engine->setExhaustVelocity(_exhaustVelocity);
+    void setSpecificImpulse(double _exhaustVelocity) override {
+        engine->setSpecificImpulse(_exhaustVelocity);
     }
 
     void setMassFlowRate(double _massFlowRate) override {
