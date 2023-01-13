@@ -40,6 +40,37 @@ public:
     void setRocketAngle(double angle) {}
     void detachStage(RocketStage* rocketStage) {}
 
+    void rocketFlightLogic(double deltaT_s, double& deltaPhi) {
+        gravityAcc = Physics::calcGravityAcceleration(planet->getMass(), planet->getRadius(), rocket->getAltitude());
+        enginesCurrentThrust = rocket->getEnginesCurrentThrust(gravityAcc);
+
+
+        centrifugalForce = Physics::calcCentrifugalForce(rocket->velocityPhi, rocket->calcTotalMass(), deltaPhi, deltaT_s);
+
+        rocket->velocityR += Physics::calcDeltaVelocityInUniformlyAcceleratedMotion(rocket->accelerationR, deltaT_s);
+        rocket->velocityPhi += Physics::calcDeltaVelocityInUniformlyAcceleratedMotion(rocket->accelerationPhi, deltaT_s);
+
+
+        gravityForce = Physics::calcForce(gravityAcc, rocket->calcTotalMass());
+        forceR = Physics::calcForceR(enginesCurrentThrust, rocket->angle, centrifugalForce, gravityForce);
+        forcePhi = Physics::calcForcePhi(enginesCurrentThrust, rocket->angle, centrifugalForce);
+
+
+        rocket->accelerationPhi = Physics::calcAccelerationByForce(forcePhi, rocket->calcTotalMass());
+        rocket->accelerationR = Physics::calcAccelerationByForce(forceR, rocket->calcTotalMass());
+
+
+        rocket->altitude += Physics::calcDeltaDistanceInUniformlyAcceleratedMotion(rocket->velocityR, rocket->accelerationR, deltaT_s);
+
+        double deltaDistancePhi = Physics::calcDeltaDistanceInUniformlyAcceleratedMotion(rocket->velocityPhi, rocket->accelerationPhi, deltaT_s);
+        deltaPhi = asin(deltaDistancePhi / getAbsoluteRocketAltitude());  // in radians
+//            deltaPhi = deltaDistancePhi / getAbsoluteRocketAltitude();  // in radians
+        rocket->anglePhi += deltaPhi;
+
+        rocket->burnFuel(deltaT_s);
+        flightDuration += deltaT_s;
+    }
+
 
     void launchRocket() {
         const double deltaT_s = ConversionSI::convertTimeMS_TO_S(deltaT_ms);
@@ -48,41 +79,9 @@ public:
         while(flightDuration < 72000) {
             printRocketTelemetry();
 
-            gravityAcc = Physics::calcGravityAcceleration(planet->getMass(), planet->getRadius(), rocket->getAltitude());
-            enginesCurrentThrust = rocket->getEnginesCurrentThrust(gravityAcc);
-
-
-            centrifugalForce = Physics::calcCentrifugalForce(rocket->velocityPhi, rocket->calcTotalMass(), deltaPhi, deltaT_s);
-
-            rocket->velocityR += Physics::calcDeltaVelocityInUniformlyAcceleratedMotion(rocket->accelerationR, deltaT_s);
-            rocket->velocityPhi += Physics::calcDeltaVelocityInUniformlyAcceleratedMotion(rocket->accelerationPhi, deltaT_s);
-
-
-            gravityForce = Physics::calcForce(gravityAcc, rocket->calcTotalMass());
-            forceR = Physics::calcForceR(enginesCurrentThrust, rocket->angle, centrifugalForce, gravityForce);
-            forcePhi = Physics::calcForcePhi(enginesCurrentThrust, rocket->angle, centrifugalForce);
-
-
-            rocket->accelerationPhi = Physics::calcAccelerationByForce(forcePhi, rocket->calcTotalMass());
-            rocket->accelerationR = Physics::calcAccelerationByForce(forceR, rocket->calcTotalMass());
-
-
-            rocket->altitude += Physics::calcDeltaDistanceInUniformlyAcceleratedMotion(rocket->velocityR, rocket->accelerationR, deltaT_s);
-
-            double deltaDistancePhi = Physics::calcDeltaDistanceInUniformlyAcceleratedMotion(rocket->velocityPhi, rocket->accelerationPhi, deltaT_s);
-            deltaPhi = asin(deltaDistancePhi / getAbsoluteRocketAltitude());  // in radians
-//            deltaPhi = deltaDistancePhi / getAbsoluteRocketAltitude();  // in radians
-            rocket->anglePhi += deltaPhi;
-
-
-            // For output data
-            xPosition = getAbsoluteRocketAltitude()/1000.0 * sin(rocket->anglePhi);
-            yPosition = getAbsoluteRocketAltitude()/1000.0 * cos(rocket->anglePhi);
-
-            rocket->burnFuel(deltaT_s);
+            rocketFlightLogic(deltaT_s, deltaPhi);
 
             std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(deltaT_ms));
-            flightDuration += deltaT_s;
         }
     }
 
@@ -100,40 +99,12 @@ public:
         const double deltaT_s = ConversionSI::convertTimeMS_TO_S(deltaT_ms);
         double deltaPhi = 0;
         while(flightDuration < 72000) {
-            gravityAcc = Physics::calcGravityAcceleration(planet->getMass(), planet->getRadius(), rocket->getAltitude());
-            enginesCurrentThrust = rocket->getEnginesCurrentThrust(gravityAcc);
-
-            centrifugalForce = Physics::calcCentrifugalForce(rocket->velocityPhi, rocket->calcTotalMass(), deltaPhi, deltaT_s);
-
-            rocket->velocityR += Physics::calcDeltaVelocityInUniformlyAcceleratedMotion(rocket->accelerationR, deltaT_s);
-            rocket->velocityPhi += Physics::calcDeltaVelocityInUniformlyAcceleratedMotion(rocket->accelerationPhi, deltaT_s);
-
-
-            gravityForce = Physics::calcForce(gravityAcc, rocket->calcTotalMass());
-            forceR = Physics::calcForceR(enginesCurrentThrust, rocket->angle, centrifugalForce, gravityForce);
-            forcePhi = Physics::calcForcePhi(enginesCurrentThrust, rocket->angle, centrifugalForce);
-
-
-            rocket->accelerationPhi = Physics::calcAccelerationByForce(forcePhi, rocket->calcTotalMass());
-            rocket->accelerationR = Physics::calcAccelerationByForce(forceR, rocket->calcTotalMass());
-
-
-            rocket->altitude += Physics::calcDeltaDistanceInUniformlyAcceleratedMotion(rocket->velocityR, rocket->accelerationR, deltaT_s);
-
-            double deltaDistancePhi = Physics::calcDeltaDistanceInUniformlyAcceleratedMotion(rocket->velocityPhi, rocket->accelerationPhi, deltaT_s);
-            deltaPhi = asin(deltaDistancePhi / getAbsoluteRocketAltitude());  // in radians
-//            deltaPhi = deltaDistancePhi / getAbsoluteRocketAltitude();  // in radians
-            rocket->anglePhi += deltaPhi;
-
+            rocketFlightLogic(deltaT_s, deltaPhi);
 
             // For output data
             xPosition = getAbsoluteRocketAltitude()/1000.0 * sin(rocket->anglePhi);
             yPosition = getAbsoluteRocketAltitude()/1000.0 * cos(rocket->anglePhi);
-            rocketPositionFile << flightDuration << "|" << xPosition << "|" << yPosition << "|" << getAbsoluteRocketAltitude() << "|" << enginesCurrentThrust << "|" << rocket->velocityPhi << "|" << rocket->velocityR << "|" << rocket->accelerationR << "|" << gravityAcc << "|" << gravityForce << "|" << centrifugalForce << "|" << forceR << "|" << forcePhi << "|" << deltaDistancePhi << "|" << deltaPhi << "|" << rocket->angle << "|" << Physics::convertDegreesToRadians(rocket->angle) << std::endl;
-
-            rocket->burnFuel(deltaT_s);
-
-            flightDuration += deltaT_s;
+            rocketPositionFile << flightDuration << "|" << xPosition << "|" << yPosition << "|" << getAbsoluteRocketAltitude() << "|" << enginesCurrentThrust << "|" << rocket->velocityPhi << "|" << rocket->velocityR << "|" << rocket->accelerationR << "|" << gravityAcc << "|" << gravityForce << "|" << centrifugalForce << "|" << forceR << "|" << forcePhi << "|" << rocket->angle << "|" << Physics::convertDegreesToRadians(rocket->angle) << std::endl;
         }
         rocketPositionFile.close();
     }
