@@ -34,6 +34,10 @@ public:
         return gravityAcc * specificImpulse * massFlowRate * (currentPower / 100.0);
     }
 
+    [[nodiscard]] double getMaxThrust(double gravityAcc) const {
+        return gravityAcc * specificImpulse * massFlowRate;
+    }
+
     [[nodiscard]] double getCurrentMassFlowRate() const {
         return massFlowRate * currentPower / 100;
     }

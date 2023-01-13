@@ -40,51 +40,54 @@ public:
         rocket = new Rocket();
     }
 
-    void buildRocketStageSmall() {
+    void buildSmallRocketStage() {
         rocketStageBuilder->initRocketStageSpace();
-        rocketStageBuilder->mountSmallFuelTank();
-        rocketStageBuilder->mountRaptorEngine();
+        rocketStageBuilder->mountSmallFuelTankSPF();
+        rocketStageBuilder->mountHawkEngineSPF();
+
         rocket->stages.push_back(rocketStageBuilder->getResult());
     }
 
-    void buildRocketStageBig() {
+    void buildBigRocketStage() {
         rocketStageBuilder->initRocketStageSpace();
-        rocketStageBuilder->mountBigFuelTank();
-        rocketStageBuilder->mountRaptorEngine();
-//        rocketStageBuilder->mountRaptorEngine();
-//        rocketStageBuilder->mountRaptorEngine();
+        rocketStageBuilder->mountBigFuelTankSPF();
+        rocketStageBuilder->mountHawkEngineSPF();
+        rocketStageBuilder->mountHawkEngineSPF();
+
         rocket->stages.push_back(rocketStageBuilder->getResult());
     }
+
 
     void buildStarshipSecondStage() {
         rocketStageBuilder->initRocketStageSpace();
         rocketStageBuilder->mountStarshipFuelTank();
-        rocketStageBuilder->mountRaptorEngine();
-//        rocketStageBuilder->mountRaptorEngine();
-//        rocketStageBuilder->mountRaptorEngine();
+        rocketStageBuilder->mountSpaceXRaptorV1Engine();
+        rocketStageBuilder->mountSpaceXRaptorV1Engine();
+        rocketStageBuilder->mountSpaceXRaptorV1Engine();
+
         rocket->stages.push_back(rocketStageBuilder->getResult());
     }
 
     void buildSpaceFlightSimulatorTestRocket() {
         rocketStageBuilder->initRocketStageSpace();
-        rocketStageBuilder->mountSpecificFuelTank(2000*4, 18000*4, 1);
-//        rocketStageBuilder->mountSpecificFuelTank(2000*4, 18000*8, 1);
+        rocketStageBuilder->mountSpecificFuelTank(2000*4, 18000*4, 1);    // Specs for test rocket in spaceflight simulator
+//        rocketStageBuilder->mountSpecificFuelTank(2000*1, 18000*1, 1);
 //        rocketStageBuilder->mountSpecificFuelTank(2000000, 0, 1);
-        rocketStageBuilder->mountSpecificEngine(3500+4400, 240, (120*1000)/(240.0));
+        rocketStageBuilder->mountSpecificEngine(3500+4400, 240, (120*1000)/(240.0));   // Specs for test rocket in spaceflight simulator
 //        rocketStageBuilder->mountSpecificEngine(3500+4400, 500, (120*1000)/(240.0));
 //        rocketStageBuilder->mountSpecificEngine(0, 500, (120*1000)/(240.0));
 
         rocket->stages.push_back(rocketStageBuilder->getResult());
     }
 
-    void buildSpecificRocketStage(double mass, double fuelAmount, int maxEngineNumberSupport, const std::string& engineType, int engineNumber) {
+    void buildSpecificRocketStage(double mass, double fuelAmount, int maxEngineNumberSupport, const std::string& engineType, int numberOfEngines) {
         rocketStageBuilder->initRocketStageSpace();
         rocketStageBuilder->mountSpecificFuelTank(mass, fuelAmount, maxEngineNumberSupport);
-        for (int i = 0; i < engineNumber; i++) {
+        for (int i = 0; i < numberOfEngines; i++) {
             if (engineType == "Raptor") {
-                rocketStageBuilder->mountRaptorEngine();
+                rocketStageBuilder->mountSpaceXRaptorV1Engine();
             } else {
-                throw "Engine type not supported";
+                throw std::invalid_argument("Engine type not supported");
             }
         }
         rocket->stages.push_back(rocketStageBuilder->getResult());
@@ -132,6 +135,10 @@ public:
         for(auto stage : rocket->stages) {
             stage->printConnections();
         }
+    }
+
+    void printRocketInfo() {
+        rocket->printInfo();
     }
 
 

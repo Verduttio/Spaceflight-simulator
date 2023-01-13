@@ -9,20 +9,19 @@
 
 class EngineDirector {
 public:
-    void constructRaptorEngine(IEngineBuilder* engineBuilder) {
+    void constructSpacexRaptorV1Engine(IEngineBuilder* engineBuilder) {
         engineBuilder->initEngineSpace();
         engineBuilder->setMass(1600);
         engineBuilder->setSpecificImpulse(340);
         engineBuilder->setMassFlowRate(650);
     }
 
-//    void constructMerlinEngine(IEngineBuilder* engineBuilder) {
-//        engineBuilder->initEngineSpace();
-//        engineBuilder->setMass(470);
-//        engineBuilder->setThrust(653720);  // in Newtons
-//        engineBuilder->setExhaustVelocity(2770);
-//        engineBuilder->setMassFlowRate(236);
-//    }
+    void constructHawkEngineSPF(IEngineBuilder* engineBuilder) {
+        engineBuilder->initEngineSpace();
+        engineBuilder->setMass(3500);
+        engineBuilder->setSpecificImpulse(240);
+        engineBuilder->setMassFlowRate((120*1000)/(240.0));
+    }
 
     void constructSpecificEngine(IEngineBuilder* engineBuilder, double mass, double specificImpulse, double massFlowRate) {
         engineBuilder->initEngineSpace();

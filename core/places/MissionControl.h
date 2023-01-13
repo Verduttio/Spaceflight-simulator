@@ -19,7 +19,7 @@ class MissionControl {
     Rocket* rocket;
     Planet* planet;
     double fuelMassAtStart;
-    double deltaT_ms;
+    const double deltaT_ms;
     double flightDuration;
     double gravityAcc;
     double enginesCurrentThrust;
@@ -32,7 +32,7 @@ class MissionControl {
 
 
 public:
-    MissionControl() {
+    MissionControl() : deltaT_ms(1000) {
         rocket = nullptr;
         planet = nullptr;
     };
@@ -72,20 +72,33 @@ public:
     }
 
 
-    void launchRocket() {
+    [[noreturn]] void launchRocket() {
+        std::ofstream rocketTelemetryFile;
+        rocketTelemetryFile.open("rocketTelemetry_live.txt");
+
         const double deltaT_s = ConversionSI::convertTimeMS_TO_S(deltaT_ms);
         double deltaPhi = 0;
         setPowerForAllEngines(100);
-        while(flightDuration < 72000) {
+        while(true) {
             printRocketTelemetry();
 
             rocketFlightLogic(deltaT_s, deltaPhi);
 
+
+            // For output data
+            xPosition = getAbsoluteRocketAltitude()/1000.0 * sin(rocket->anglePhi);
+            yPosition = getAbsoluteRocketAltitude()/1000.0 * cos(rocket->anglePhi);
+            rocketTelemetryFile << flightDuration << "|" << xPosition << "|" << yPosition << "|" << getAbsoluteRocketAltitude() << "|" << enginesCurrentThrust << "|" << rocket->velocityPhi << "|" << rocket->velocityR << "|" << rocket->accelerationR << "|" << gravityAcc << "|" << gravityForce << "|" << centrifugalForce << "|" << forceR << "|" << forcePhi << "|" << rocket->angle << "|" << Physics::convertDegreesToRadians(rocket->angle) << std::endl;
+
             std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(deltaT_ms));
         }
+
+        rocketTelemetryFile.close();
     }
 
     void launchRocketSimulation() {
+        double simulationTime = 0;   // in seconds
+
         std::ofstream rocketPositionFile;
         rocketPositionFile.open("rocketPosition.txt");
 
@@ -93,12 +106,11 @@ public:
         this->rocket->altitude=300000;   // m
         this->rocket->velocityPhi=7734.2;   // m/s     // between 7734.2 a 7734.3
         this->rocket->angle = 90;   // 90 degrees
-//        setPowerForAllEngines(100);
         // init data - end
 
         const double deltaT_s = ConversionSI::convertTimeMS_TO_S(deltaT_ms);
         double deltaPhi = 0;
-        while(flightDuration < 72000) {
+        while(flightDuration < simulationTime) {
             rocketFlightLogic(deltaT_s, deltaPhi);
 
             // For output data
@@ -106,6 +118,7 @@ public:
             yPosition = getAbsoluteRocketAltitude()/1000.0 * cos(rocket->anglePhi);
             rocketPositionFile << flightDuration << "|" << xPosition << "|" << yPosition << "|" << getAbsoluteRocketAltitude() << "|" << enginesCurrentThrust << "|" << rocket->velocityPhi << "|" << rocket->velocityR << "|" << rocket->accelerationR << "|" << gravityAcc << "|" << gravityForce << "|" << centrifugalForce << "|" << forceR << "|" << forcePhi << "|" << rocket->angle << "|" << Physics::convertDegreesToRadians(rocket->angle) << std::endl;
         }
+
         rocketPositionFile.close();
     }
 
@@ -163,12 +176,11 @@ public:
         }
     }
 
-    void setMissionControl(double _deltaT_ms) {
+    void setMissionControl() {
         if(rocket == nullptr) {
             std::cout << "Cannot set mission control because there is no rocket in mission control!" << std::endl;
             return;
         }
-        this->deltaT_ms = _deltaT_ms;
         this->flightDuration = 0;
         this->gravityAcc = 0;
         this->enginesCurrentThrust = 0;

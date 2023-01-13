@@ -30,6 +30,11 @@ public:
 
     RocketStageBuilder() {
         rocketStageId = 0;
+        rocketStage = nullptr;
+        engineBuilder = nullptr;
+        engineDirector = nullptr;
+        fuelTankBuilder = nullptr;
+        fuelTankDirector = nullptr;
     }
 
     void setEngineBuilder(EngineBuilder* _engineBuilder) {
@@ -48,39 +53,44 @@ public:
         fuelTankDirector = _fuelTankDirector;
     }
 
-    void mountRaptorEngine() {
+    void mountSpaceXRaptorV1Engine() {
         checkEngineMountPermission();
 
-        engineDirector->constructRaptorEngine(engineBuilder);
+        engineDirector->constructSpacexRaptorV1Engine(engineBuilder);
         rocketStage->addEngine(engineBuilder->getResult());
     }
 
-//    void mountMerlinEngine() {
-//        checkEngineMountPermission();
-//
-//        engineDirector->constructMerlinEngine(engineBuilder);
-//        rocketStage->addEngine(engineBuilder->getResult());
-//    }
+    void mountHawkEngineSPF() {
+        checkEngineMountPermission();
+
+        engineDirector->constructHawkEngineSPF(engineBuilder);
+        rocketStage->addEngine(engineBuilder->getResult());
+    }
+
+    void mountSmallFuelTankSPF() {
+        checkFuelTankMountPermission();
+
+        fuelTankDirector->constructSmallFuelTankSPF(fuelTankBuilder);
+        rocketStage->setFuelTank(fuelTankBuilder->getResult());
+    }
+
+    void mountBigFuelTankSPF() {
+        checkFuelTankMountPermission();
+
+        fuelTankDirector->constructBigFuelTankSPF(fuelTankBuilder);
+        rocketStage->setFuelTank(fuelTankBuilder->getResult());
+    }
+
 
     void mountSpecificEngine(double mass, double specificImpulse, double massFlowRate) {
+        if(mass <= 0 || specificImpulse <= 0 || massFlowRate <= 0) {
+            throw std::invalid_argument("Mass, specific impulse and mass flow rate must be greater than 0");
+        }
+
         checkEngineMountPermission();
 
         engineDirector->constructSpecificEngine(engineBuilder, mass, specificImpulse, massFlowRate);
         rocketStage->addEngine(engineBuilder->getResult());
-    }
-
-    void mountSmallFuelTank() {
-        checkFuelTankMountPermission();
-
-        fuelTankDirector->constructSmallFuelTank(fuelTankBuilder);
-        rocketStage->setFuelTank(fuelTankBuilder->getResult());
-    }
-
-    void mountBigFuelTank() {
-        checkFuelTankMountPermission();
-
-        fuelTankDirector->constructBigFuelTank(fuelTankBuilder);
-        rocketStage->setFuelTank(fuelTankBuilder->getResult());
     }
 
     void mountStarshipFuelTank() {
@@ -91,6 +101,10 @@ public:
     }
 
     void mountSpecificFuelTank(double mass, double fuelAmount, int maxEngineNumberSupport) {
+        if(mass <= 0 || fuelAmount <= 0 || maxEngineNumberSupport <= 0) {
+            throw std::invalid_argument("Mass, fuel amount and max engine number support must be greater than 0");
+        }
+
         checkFuelTankMountPermission();
 
         fuelTankDirector->constructSpecificFuelTank(fuelTankBuilder, mass, fuelAmount, maxEngineNumberSupport);
@@ -100,21 +114,22 @@ public:
     RocketStage* getResult() {
         return rocketStage;
     }
+
 private:
     void checkEngineMountPermission() {
         if(rocketStage->getFuelTank() == nullptr) {
-            throw "Fuel tank not mounted! Mount fuel tank first before mounting engine!";
+            throw std::invalid_argument("Fuel tank not mounted! Mount fuel tank first before mounting engine!");
         }
 
         // Check if engine can be mounted
         if(rocketStage->getFuelTank()->getMaxEngineNumberSupport() <= rocketStage->getEngineNumber()) {
-            throw "Engine cannot be mounted! Maximum engine number support reached!";
+            throw std::invalid_argument("Engine cannot be mounted! Maximum engine number support reached!");
         }
     }
 
     void checkFuelTankMountPermission() {
         if(rocketStage->getFuelTank() != nullptr) {
-            throw "Fuel tank cannot be mounted! Fuel tank already mounted!";
+            throw std::invalid_argument("Fuel tank cannot be mounted! Fuel tank already mounted!");
         }
     }
 
