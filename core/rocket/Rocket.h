@@ -89,6 +89,10 @@ public:
         return maxThrust;
     }
 
+    size_t getNumberOfRocketStages() {
+        return stages.size();
+    }
+
     void printInfo() {
         std::cout << "Rocket info:" << std::endl;
         std::cout << "Mass: " << calcTotalMass() << " kg" << std::endl;

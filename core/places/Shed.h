@@ -57,7 +57,6 @@ public:
         rocketStageBuilder->initRocketStageSpace();
         rocketStageBuilder->mountBigFuelTankSPF();
         rocketStageBuilder->mountHawkEngineSPF();
-        rocketStageBuilder->mountHawkEngineSPF();
 
         rocket->stages.push_back(rocketStageBuilder->getResult());
     }
@@ -131,7 +130,7 @@ public:
     // Check whether all rocket stages are connected to each other and make fully stacked rocket
     bool rocketFullyStacked() {
         // We start from rocket stage with id 0 and check if we can reach all other rocket stages
-        size_t numberOfRocketStages = rocket->stages.size();
+        size_t numberOfRocketStages = rocket->getNumberOfRocketStages();
         bool* stageVisited = new bool [numberOfRocketStages];
         for (int i = 0; i < numberOfRocketStages; i++) {
             stageVisited[i] = false;

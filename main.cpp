@@ -211,7 +211,7 @@ void beginnerRocketBuilderScreen(Shed& shed, MissionControl& missionControl) {
 
         std::cout << "Possible rocket stages:" << std::endl;
         std::cout << "1. Small rocket stage. [fuel = 9t, dry mass = 1t, engines=1]" << std::endl;
-        std::cout << "2. Big rocket stage. [fuel = 18t, dry mass = 2t, engines=2]" << std::endl;
+        std::cout << "2. Big rocket stage. [fuel = 18t, dry mass = 2t, engines=1]" << std::endl;
         if (!buildingStarted) std::cout << "3. Go back." << std::endl << std::endl;
         if (buildingStarted) std::cout << "3. Finish building." << std::endl << std::endl;
         std::cout << "Choose an option: ";

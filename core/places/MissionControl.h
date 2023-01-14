@@ -160,6 +160,16 @@ public:
         std::cout << "Total mass: " << rocket->calcTotalMass() << " kg" << std::endl;
         std::cout << "Fuel mass: " << rocket->getFuelMass() << " kg" << std::endl;
         std::cout << "Fuel amount: " << rocket->getFuelMass() / fuelMassAtStart * 100 << " % " << std::endl;
+
+        if(rocket->getNumberOfRocketStages() > 1) {
+            std::cout << "--------------StagesInfo--------------" << std::endl;
+            for (auto *rocketStage: rocket->stages) {
+                std::cout << "------Stage No. " << rocketStage->getId() << "------" << std::endl;
+                std::cout << "Thrust: " << rocketStage->getEnginesCurrentThrust(gravityAcc) << " N" << std::endl;
+                std::cout << "Mass flow rate: " << rocketStage->getCurrentMassFlowRate() << " kg/s" << std::endl;
+                std::cout << "Fuel mass: " << rocketStage->getFuelAmount() << " kg" << std::endl;
+            }
+        }
         std::cout << "#####################################" << std::endl << std::endl;
     }
 
