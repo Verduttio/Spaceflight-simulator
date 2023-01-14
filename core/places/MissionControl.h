@@ -14,6 +14,7 @@
 #include "../../tools/Physics.h"
 #include <fstream>
 #include <iomanip>
+#include <thread>
 
 class MissionControl {
     Rocket* rocket;
@@ -29,6 +30,7 @@ class MissionControl {
     double forcePhi;
     double xPosition;
     double yPosition;
+    bool abortFlight;
 
 
 public:
@@ -79,8 +81,8 @@ public:
         const double deltaT_s = ConversionSI::convertTimeMS_TO_S(deltaT_ms);
         double deltaPhi = 0;
         setPowerForAllEngines(100);
-        while(true) {
-            printRocketTelemetry();
+        while(!abortFlight) {
+//            printRocketTelemetry();
 
             rocketFlightLogic(deltaT_s, deltaPhi);
 
@@ -186,6 +188,10 @@ public:
         }
     }
 
+    void terminateFlight() {
+        this->abortFlight = true;
+    }
+
     void setMissionControl() {
         if(rocket == nullptr) {
             std::cout << "Cannot set mission control because there is no rocket in mission control!" << std::endl;
@@ -198,6 +204,7 @@ public:
         this->centrifugalForce = 0;
         this->forceR = 0;
         this->forcePhi = 0;
+        this->abortFlight = false;
 
         this->fuelMassAtStart = rocket->getFuelMass();
     }

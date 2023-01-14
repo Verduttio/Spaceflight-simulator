@@ -16,6 +16,34 @@ void clearConsole() {
 void homeScreen(Shed& shed, MissionControl& missionControl);
 void buildingOptionsScreen(Shed& shed, MissionControl& missionControl);
 
+void controlRocketScreen(Shed& shed, MissionControl& missionControl) {
+    while(true) {
+        std::cout << "[t] - display rocket telemetry" << std::endl;
+        std::cout << "[abort] - abort the flight" << std::endl;
+        // Check input correctness
+        std::string userInput;
+        while (true) {
+            std::cin >> userInput;
+            if (userInput != "t" && userInput != "abort") {
+                std::cout << "Incorrect input." << std::endl;
+            } else {
+                break;
+            }
+        }
+
+
+        if (userInput == "t") {
+            missionControl.printRocketTelemetry();
+        } else if (userInput == "abort") {
+            missionControl.terminateFlight();
+            break;
+        }
+
+        std::cout << std::endl << std::endl;
+
+    }
+}
+
 void displayRocketBeforeFlightScreen(Shed& shed, MissionControl& missionControl) {
     clearConsole();
     std::cout << "Your rocket: " << std::endl;
@@ -39,7 +67,16 @@ void displayRocketBeforeFlightScreen(Shed& shed, MissionControl& missionControl)
     }
 
     clearConsole();
-    missionControl.launchRocket();
+
+    // Launch the rocket in a new thread
+    // so that we can get user input while the rocket is flying
+    std::thread flightThread(&MissionControl::launchRocket, &missionControl);
+
+
+    // Getting user input to control the rocket
+    controlRocketScreen(shed, missionControl);
+    flightThread.join();
+
 }
 
 void possibleRocketsScreen(Shed& shed, MissionControl& missionControl) {
