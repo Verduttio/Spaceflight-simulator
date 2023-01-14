@@ -16,15 +16,41 @@ void clearConsole() {
 void homeScreen(Shed& shed, MissionControl& missionControl);
 void buildingOptionsScreen(Shed& shed, MissionControl& missionControl);
 
+unsigned int validateUserRocketControlInput(const std::string& input) {
+    // Possible options:
+    // Single argument commands: t, abort, rs   return 1
+    // Double argument commands: aXY, pXY, dX   return 2
+    // Invalid input: anything else        return 0
+
+    // Firstly check whether input is a single argument command
+    // then check whether input is a double argument command
+
+    if (input == "t" || input == "abort" || input == "rs") {
+        return 1;
+    } else {
+        try {
+            std::stoi(input.substr(1));
+            return 2;
+        } catch (std::invalid_argument& e) {
+            return 0;
+        }
+    }
+
+}
+
 void controlRocketScreen(Shed& shed, MissionControl& missionControl) {
     while(true) {
         std::cout << "[t] - display rocket telemetry" << std::endl;
         std::cout << "[abort] - abort the flight" << std::endl;
+        std::cout << "[rs] - print rocket stages and its connections" << std::endl;
+        std::cout << "[a30] - set rocket angle to 30 (any value from [-180,180])" << std::endl;
+        std::cout << "[p60] - set rocket engines power to 60% (any value from [0,100])" << std::endl;
+        std::cout << "[d1] - detach stage No. 1" << std::endl;
         // Check input correctness
         std::string userInput;
         while (true) {
             std::cin >> userInput;
-            if (userInput != "t" && userInput != "abort") {
+            if (validateUserRocketControlInput(userInput) == 0) {
                 std::cout << "Incorrect input." << std::endl;
             } else {
                 break;
@@ -32,11 +58,27 @@ void controlRocketScreen(Shed& shed, MissionControl& missionControl) {
         }
 
 
-        if (userInput == "t") {
-            missionControl.printRocketTelemetry();
-        } else if (userInput == "abort") {
-            missionControl.terminateFlight();
-            break;
+        // Trigger the appropriate action
+        unsigned int action = validateUserRocketControlInput(userInput);
+        if (action == 1) {
+            if (userInput == "t") {
+                missionControl.printRocketTelemetry();
+            } else if (userInput == "abort") {
+                missionControl.terminateFlight();
+                break;
+            } else if (userInput == "rs") {
+                missionControl.drawRocketStagesASCII();
+                missionControl.printRocketStagesConnections();
+            }
+        } else if (action == 2) {
+            if (userInput[0] == 'a') {
+                std::cout << "Change angle to: |" << std::stoi(userInput.substr(1)) << "|" << std::endl;
+                missionControl.setRocketAngle(std::stoi(userInput.substr(1)));
+            } else if (userInput[0] == 'p') {
+                missionControl.setPowerForAllEngines(std::stoi(userInput.substr(1)));
+            } else if (userInput[0] == 'd') {
+                missionControl.detachStage(std::stoi(userInput.substr(1)));
+            }
         }
 
         std::cout << std::endl << std::endl;
@@ -235,6 +277,9 @@ void beginnerRocketBuilderScreen(Shed& shed, MissionControl& missionControl) {
         std::cout << "After you select one of them you will be able to build another one." << std::endl;
         std::cout << "You will not be able to discard already built rocket stages!" << std::endl;
         std::cout << "It also means when you start building, you will have to launch the rocket!" << std::endl;
+        std::cout << "***Your first built stage will be the main rocket stage***" << std::endl;
+        std::cout << "***It means that while detaching stages during flight, the rocket continuing flight will contain the main stage***" << std::endl;
+        std::cout << "***The detached part will be 'discarded' (the part without the main stage)***" << std::endl;
         std::cout << "Your already built rocket stages will be displayed on the screen." << std::endl;
         std::cout << "After you build all rocket stages you wish, you will have to connect them (to build a one-piece rocket)." << std::endl;
 

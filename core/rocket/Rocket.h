@@ -28,6 +28,90 @@ public:
         this->velocityR = _velocity;
     }
 
+    void detachStage(unsigned int stageId) {
+        // We assume that side boosters (those which are on the left or on the right side of the main rocket stage)
+        // are always one level stages (i.e. they are not connected to any other rocket stage through up/bottom).
+
+        // Main booster (main rocket stage might be multilevel but this is TODO: implement detaching such a booster)
+
+        // We detach side booster by firstly finding on which side of the main booster are they connected.
+        // Then we detach this booster (rocket stage) and these connected to the same side from detaching booster.
+        // So if rocket stage X is connected to the main rocket stage on the left side,
+        // then we detach rocket stage X and all rocket stages connected to the left side of rocket stage X.
+
+        // TODO: If main booster is multilevel then implement detaching its stages
+
+        // After detaching we have to update rocket stages connections - DONE
+
+        // Check if detaching stage is on the left of the main booster
+        bool isLeft = false;
+        RocketStage* detachingStage = findStageById(stageId);
+        RocketStage* currentStageInWalk = detachingStage;
+        while(currentStageInWalk != nullptr) {
+            if(currentStageInWalk->getId() == 0) {
+                isLeft = true;
+                break;
+            } else {
+                auto currentConnections = currentStageInWalk->getConnections();
+                auto pair = currentConnections.find(MountSide::right);
+                if (pair != currentConnections.end()) {   // so there is a connection on the right side
+                    currentStageInWalk = pair->second;
+                } else {
+                    currentStageInWalk = nullptr;
+                }
+            }
+        }
+
+
+        // We now know on which side of the main booster is the detaching stage
+        // So we go through all stages connected to the same side,
+        // remove their connections and remove them from the rocket stages vector.
+
+        // We start from the detaching stage
+        currentStageInWalk = detachingStage;
+        while(currentStageInWalk != nullptr) {
+            // We remove all connections to the detaching stage from other stages
+            for(auto& pair : currentStageInWalk->getConnections()) {
+                pair.second->disconnect(static_cast<MountSide>((static_cast<int>(pair.first) + 2) % 4));
+            }
+//            currentStageInWalk->getConnections().clear();  // it doesn't even matter because we are going to remove this stage
+
+
+            // We remove the current stage from the rocket stages vector
+            // https://stackoverflow.com/questions/3385229/c-erase-vector-element-by-value-rather-than-by-position
+            stages.erase(std::remove(stages.begin(), stages.end(), currentStageInWalk), stages.end());
+
+
+            auto currentConnections = currentStageInWalk->getConnections();
+            // We go to the next stage
+            if(isLeft) {
+                auto pair = currentConnections.find(MountSide::left);
+                if (pair != currentConnections.end()) {   // so there is a connection on the left side
+                    currentStageInWalk = pair->second;
+                } else {
+                    currentStageInWalk = nullptr;
+                }
+            } else {
+                auto pair = currentConnections.find(MountSide::right);
+                if (pair != currentConnections.end()) {   // so there is a connection on the right side
+                    currentStageInWalk = pair->second;
+                } else {
+                    currentStageInWalk = nullptr;
+                }
+            }
+        }
+
+    }
+
+    RocketStage* findStageById(unsigned int stageId) {
+        for (auto stage : stages) {
+            if (stage->getId() == stageId) {
+                return stage;
+            }
+        }
+        return nullptr;
+    }
+
     double getTotalCurrentMassFlowRate() {
         double totalCurrentMassFlowRate = 0;
         for (RocketStage* stage : stages) {

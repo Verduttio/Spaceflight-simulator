@@ -13,7 +13,7 @@ void TEST_BUILDING_RaptorEngine() {
     auto* director = new EngineDirector();
 
     auto* builder = new EngineBuilder();
-    director->constructRaptorEngine(builder);
+    director->constructSpacexRaptorV1Engine(builder);
     Engine* engine = builder->getResult();
 
 //    assert(engine->getMaxThrust() == 185);
@@ -35,9 +35,9 @@ void TEST_BUILDING_RaptorEngine() {
 void TEST_ROCKETSTAGE_Connections() {
     Shed shed;
 
-    shed.buildRocketStageSmall();
-    shed.buildRocketStageSmall();
-    shed.buildRocketStageBig();
+    shed.buildSmallRocketStage();
+    shed.buildSmallRocketStage();
+    shed.buildBigRocketStage();
 
 
     // Make connections

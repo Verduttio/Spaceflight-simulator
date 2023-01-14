@@ -39,8 +39,18 @@ public:
         planet = nullptr;
     };
 
-    void setRocketAngle(double angle) {}
-    void detachStage(RocketStage* rocketStage) {}
+    void setRocketAngle(double angle) {
+        rocket->angle = angle;
+    }
+    void detachStage(int stageId) {
+        if (stageId < 0) {
+            std::cout << "Invalid input. Stage id must be a positive value." << std::endl;
+        } else if (stageId == 0) {
+            std::cout << "Main stage cannot be detached!" << std::endl;
+        } else {
+            rocket->detachStage(stageId);
+        }
+    }
 
     void rocketFlightLogic(double deltaT_s, double& deltaPhi) {
         gravityAcc = Physics::calcGravityAcceleration(planet->getMass(), planet->getRadius(), rocket->getAltitude());
@@ -222,6 +232,22 @@ public:
 
     void setPlanet(Planet* _planet) {
         this->planet = _planet;
+    }
+
+    // boilerplate code - the same is in shed
+    // TODO: Get rid of boilerplate code
+    void drawRocketStagesASCII() {
+        for(auto stage : rocket->stages) {
+            stage->drawASCII();
+            std::cout << "No. " << stage->getId() << std::endl;
+            std::cout << std::endl;
+        }
+    }
+
+    void printRocketStagesConnections() {
+        for(auto stage : rocket->stages) {
+            stage->printConnections();
+        }
     }
 };
 
