@@ -27,8 +27,8 @@ public:
         engine->setMass(_mass);
     }
 
-    void setSpecificImpulse(double _exhaustVelocity) override {
-        engine->setSpecificImpulse(_exhaustVelocity);
+    void setSpecificImpulse(double _specificImpulse) override {
+        engine->setSpecificImpulse(_specificImpulse);
     }
 
     void setMassFlowRate(double _massFlowRate) override {

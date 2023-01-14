@@ -115,6 +115,14 @@ public:
         return totalMass;
     }
 
+    std::vector<RocketStage*> getConnectedRocketStages() {
+        std::vector<RocketStage*> connectedRocketStages;
+        for (auto connection : connections) {
+            connectedRocketStages.push_back(connection.second);
+        }
+        return connectedRocketStages;
+    }
+
     void printConnections() {
         std::cout << "Connections of stage number: " << id << std::endl;
 

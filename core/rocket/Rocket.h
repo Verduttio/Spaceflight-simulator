@@ -91,8 +91,8 @@ public:
 
     void printInfo() {
         std::cout << "Rocket info:" << std::endl;
-        std::cout << "Mass: " << calcTotalMass() << std::endl;
-        std::cout << "Fuel mass: " << getFuelMass() << std::endl;
+        std::cout << "Mass: " << calcTotalMass() << " kg" << std::endl;
+        std::cout << "Fuel mass: " << getFuelMass() << " kg" << std::endl;
         std::cout << "Thrust/Weight ratio: " << getEnginesMaxThrust(9.81) / (calcTotalMass()*9.81) << std::endl;
     }
 

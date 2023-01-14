@@ -4,8 +4,11 @@
 
 #ifndef ABSTRACTPROGRAMMINGPROJECT_OUT_SHED_H
 #define ABSTRACTPROGRAMMINGPROJECT_OUT_SHED_H
+
+#include <queue>
 #include "../rocket/Rocket.h"
 #include "../rocket/rocketStage/RocketStageBuilder.h"
+#include "../rocket/engine/EngineInfoProvider.h"
 #include "MissionControl.h"
 
 class Shed {
@@ -13,6 +16,7 @@ class Shed {
     RocketStageBuilder* rocketStageBuilder;
     EngineBuilder* engineBuilder;
     EngineDirector* engineDirector;
+    EngineInfoProvider* engineInfoProvider;
     FuelTankBuilder* fuelTankBuilder;
     FuelTankDirector* fuelTankDirector;
 
@@ -22,6 +26,7 @@ public:
         rocketStageBuilder = new RocketStageBuilder();
         engineBuilder = new EngineBuilder();
         engineDirector = new EngineDirector();
+        engineInfoProvider = new EngineInfoProvider();
         fuelTankBuilder = new FuelTankBuilder();
         fuelTankDirector = new FuelTankDirector();
 
@@ -122,6 +127,43 @@ public:
         }
         return nullptr;
     }
+
+    // Check whether all rocket stages are connected to each other and make fully stacked rocket
+    bool rocketFullyStacked() {
+        // We start from rocket stage with id 0 and check if we can reach all other rocket stages
+        size_t numberOfRocketStages = rocket->stages.size();
+        bool* stageVisited = new bool [numberOfRocketStages];
+        for (int i = 0; i < numberOfRocketStages; i++) {
+            stageVisited[i] = false;
+        }
+
+        // Start walking through rocket stages
+        std::queue<RocketStage*> rocketStageQueue;
+        rocketStageQueue.push(rocket->stages[0]);
+        while(!rocketStageQueue.empty()) {
+            RocketStage* currentRocketStage = rocketStageQueue.front();
+            rocketStageQueue.pop();
+            stageVisited[currentRocketStage->getId()] = true;
+            for (auto connectedRocketStage : currentRocketStage->getConnectedRocketStages()) {
+                if (!stageVisited[connectedRocketStage->getId()]) {
+                    rocketStageQueue.push(connectedRocketStage);
+                }
+            }
+        }
+
+        // Check if all rocket stages were visited
+        for (int i = 0; i < numberOfRocketStages; i++) {
+            if (!stageVisited[i]) {
+                return false;
+            }
+        }
+
+        delete[] stageVisited;
+
+        return true;
+
+    }
+
 
     void drawRocketStagesASCII() {
         for(auto stage : rocket->stages) {

@@ -14,13 +14,14 @@ string(APPEND CMAKE_CXX_FLAGS " -pedantic")
 
 # clangd completion
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_EXE_LINKER_FLAGS "-static")   # to run in terminal windows
 
 include_directories(${CMAKE_SOURCE_DIR})
 file(GLOB SOURCES "${CMAKE_SOURCE_DIR}/*.cpp")
 
-add_executable(${PROJECT_NAME} ${SOURCES} core/rocket/RocketComponent.h core/rocket/engine/Engine.h core/rocket/fuelTank/FuelTank.h core/rocket/rocketStage/RocketStage.h core/rocket/MountSide.h core/rocket/Rocket.h core/planet/AtmosphereLayer.h core/planet/Atmosphere.h core/planet/Planet.h core/places/Shed.h core/places/LaunchPad.h core/places/MissionControl.h core/rocket/engine/IEngineBuilder.h core/rocket/fuelTank/IFuelTankBuilder.h core/rocket/engine/EngineBuilder.h core/rocket/engine/EngineDirector.h core/rocket/fuelTank/FuelTankBuilder.h core/rocket/fuelTank/FuelTankDirector.h core/rocket/rocketStage/RocketStageBuilder.h tools/ConversionsSI.h tools/Physics.h)
-add_executable(tests tests/simpleTest.cpp)
-add_executable(main_test main_for_tests.cpp)
+add_executable(${PROJECT_NAME} ${SOURCES} core/rocket/RocketComponent.h core/rocket/engine/Engine.h core/rocket/fuelTank/FuelTank.h core/rocket/rocketStage/RocketStage.h core/rocket/MountSide.h core/rocket/Rocket.h core/planet/AtmosphereLayer.h core/planet/Atmosphere.h core/planet/Planet.h core/places/Shed.h core/places/LaunchPad.h core/places/MissionControl.h core/rocket/engine/IEngineBuilder.h core/rocket/fuelTank/IFuelTankBuilder.h core/rocket/engine/EngineBuilder.h core/rocket/engine/EngineDirector.h core/rocket/fuelTank/FuelTankBuilder.h core/rocket/fuelTank/FuelTankDirector.h core/rocket/rocketStage/RocketStageBuilder.h tools/ConversionsSI.h tools/Physics.h core/rocket/engine/EngineInfoProvider.h)
+#add_executable(tests tests/simpleTest.cpp)
+#add_executable(main_test main_for_tests.cpp)
 
 #set(Boost_USE_STATIC_LIBS        ON) # only find static libs
 #set(Boost_USE_MULTITHREADED      ON)
