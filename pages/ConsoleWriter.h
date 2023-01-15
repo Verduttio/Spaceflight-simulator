@@ -458,7 +458,7 @@ public:
             /// It's bad, we should not have a single FuelTank in our rocket stage, but a vector of FuelTanks!!!
             /// But I don't have time to do refactor it now...
             rocketStageBuilder->mountSpecificFuelTank(fuelTank1 * 1000 + fuelTank2 * 2000 + fuelTank3 * 85000,
-                                                      fuelTank1 * 9000 + fuelTank2 * 18000 + fuelTank3 * 1200000, 3);
+                                                      fuelTank1 * 9000 + fuelTank2 * 18000 + fuelTank3 * 500000, 3);
             // Mount engines
             for (int i = 0; i < engineCount; i++) {
                 if (engineType == 1) {
@@ -470,7 +470,6 @@ public:
 
             shed.addRocketStage(rocketStageBuilder->getResult());
         }
-
 
     }
 
