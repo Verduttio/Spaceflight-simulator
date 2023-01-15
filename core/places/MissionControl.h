@@ -10,8 +10,8 @@
 #include <cmath>
 #include <thread>
 #include <chrono>
-#include "../../tools/ConversionsSI.h"
-#include "../../tools/Physics.h"
+#include "../../physics/ConversionsSI.h"
+#include "../../physics/Physics.h"
 #include <fstream>
 #include <iomanip>
 #include <thread>
@@ -107,7 +107,8 @@ public:
             // For output data
             xPosition = getAbsoluteRocketAltitude()/1000.0 * sin(rocket->anglePhi);
             yPosition = getAbsoluteRocketAltitude()/1000.0 * cos(rocket->anglePhi);
-            rocketTelemetryFile << flightDuration << "|" << xPosition << "|" << yPosition << "|" << getAbsoluteRocketAltitude() << "|" << enginesCurrentThrust << "|" << rocket->velocityPhi << "|" << rocket->velocityR << "|" << rocket->accelerationR << "|" << gravityAcc << "|" << gravityForce << "|" << centrifugalForce << "|" << forceR << "|" << forcePhi << "|" << rocket->angle << "|" << Physics::convertDegreesToRadians(rocket->angle) << std::endl;
+            double yEarth = planet->getRadius()/1000.0 * cos(rocket->anglePhi);  // we need it to draw a plot
+            rocketTelemetryFile << flightDuration << "|" << xPosition << "|" << yPosition << "|" << yEarth << "|" << getAbsoluteRocketAltitude() << "|" << enginesCurrentThrust << "|" << rocket->velocityPhi << "|" << rocket->velocityR << "|" << rocket->accelerationR << "|" << gravityAcc << "|" << gravityForce << "|" << centrifugalForce << "|" << forceR << "|" << forcePhi << "|" << rocket->angle << "|" << Physics::convertDegreesToRadians(rocket->angle) << std::endl;
 
             std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(deltaT_ms));
         }

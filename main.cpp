@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <string>
 #include "core/places/Shed.h"
+#include "utils/PlotMaker.h"
 
 void clearConsole() {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
@@ -15,6 +16,19 @@ void clearConsole() {
 
 void homeScreen(Shed& shed, MissionControl& missionControl);
 void buildingOptionsScreen(Shed& shed, MissionControl& missionControl);
+
+void endingInfo() {
+    std::cout << "Thank you for playing my simulator!" << std::endl;
+    std::cout << "I hope you enjoyed it!" << std::endl;
+    std::cout << "The simulator is still in development, so there are many things to be added and fixed." << std::endl;
+    std::cout << std::endl;
+    std::cout << "!!!Data about your flight is saved in the file: rocketTelemetry.txt!!!" << std::endl;
+    std::cout << "!!!Rocket trajectory is being generated in files: rocketTrajectory.png and rocketTrajectoryFull.png...!!!" << std::endl;
+    std::cout << "!!!Please wait a few seconds...!!!" << std::endl;
+    std::cout << "Graphics generated!" << std::endl;
+
+    PlotMaker::plotRocketTrajectoryToFiles();
+}
 
 unsigned int validateUserRocketControlInput(const std::string& input) {
     // Possible options:
@@ -117,6 +131,10 @@ void displayRocketBeforeFlightScreen(Shed& shed, MissionControl& missionControl)
     // Getting user input to control the rocket
     controlRocketScreen(shed, missionControl);
     flightThread.join();
+
+    // Ending info
+    endingInfo();
+
 
 }
 
