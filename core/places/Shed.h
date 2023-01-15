@@ -9,6 +9,7 @@
 #include "../rocket/Rocket.h"
 #include "../rocket/rocketStage/RocketStageBuilder.h"
 #include "../rocket/engine/EngineInfoProvider.h"
+#include "../rocket/fuelTank/FuelTankInfoProvider.h"
 #include "MissionControl.h"
 
 class Shed {
@@ -19,6 +20,7 @@ class Shed {
     EngineInfoProvider* engineInfoProvider;
     FuelTankBuilder* fuelTankBuilder;
     FuelTankDirector* fuelTankDirector;
+    FuelTankInfoProvider* fuelTankInfoProvider;
 
 public:
     Shed(){
@@ -29,11 +31,37 @@ public:
         engineInfoProvider = new EngineInfoProvider();
         fuelTankBuilder = new FuelTankBuilder();
         fuelTankDirector = new FuelTankDirector();
+        fuelTankInfoProvider = new FuelTankInfoProvider();
+
 
         rocketStageBuilder->setEngineBuilder(engineBuilder);
         rocketStageBuilder->setEngineDirector(engineDirector);
         rocketStageBuilder->setFuelTankBuilder(fuelTankBuilder);
         rocketStageBuilder->setFuelTankDirector(fuelTankDirector);
+    }
+
+    EngineDirector* getEngineDirector() {
+        return this->engineDirector;
+    }
+
+    EngineInfoProvider* getEngineInfoProvider() {
+        return this->engineInfoProvider;
+    }
+
+    FuelTankDirector* getFuelTankDirector() {
+        return this->fuelTankDirector;
+    }
+
+    FuelTankInfoProvider* getFuelTankInfoProvider() {
+        return this->fuelTankInfoProvider;
+    }
+
+    Rocket* getRocket() {
+        return this->rocket;
+    }
+
+    void addRocketStage(RocketStage* rocketStage) {
+        rocket->stages.push_back(rocketStage);
     }
 
     void moveRocketToMissionControl(MissionControl* missionControl) {
@@ -163,11 +191,17 @@ public:
 
     }
 
+    bool checkThrustToWeightRation() {
+        double thrust = rocket->getEnginesMaxThrust(9.81);
+        double weight = rocket->calcTotalMass() * 9.81;
+        return thrust > weight;
+    }
+
 
     void drawRocketStagesASCII() {
         for(auto stage : rocket->stages) {
+            stage->printInfo();
             stage->drawASCII();
-            std::cout << "No. " << stage->getId() << std::endl;
             std::cout << std::endl;
         }
     }
@@ -181,7 +215,6 @@ public:
     void printRocketInfo() {
         rocket->printInfo();
     }
-
 
 };
 

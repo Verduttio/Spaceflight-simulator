@@ -92,7 +92,6 @@ public:
         double deltaPhi = 0;
         setPowerForAllEngines(100);
         while(!abortFlight) {
-//            printRocketTelemetry();
 
             rocketFlightLogic(deltaT_s, deltaPhi);
 

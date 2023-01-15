@@ -25,6 +25,11 @@ public:
         return this->id;
     }
 
+    void printInfo() {
+        std::cout << "Rocket stage id: " << this->id << std::endl;
+        std::cout << "Total mass: " << this->calcTotalMass() << " kg" << std::endl;
+    }
+
     void connect(RocketStage* rocketStage, MountSide mountSide) {
         connections[mountSide] = rocketStage;
     }

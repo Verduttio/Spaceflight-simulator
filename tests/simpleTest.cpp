@@ -6,8 +6,8 @@
 #include "../core/rocket/fuelTank/FuelTankDirector.h"
 #include "../core/rocket/fuelTank/FuelTankBuilder.h"
 #include "../core/places/Shed.h"
-#include "../tools/ConversionsSI.h"
-#include "../tools/Physics.h"
+#include "../physics/ConversionsSI.h"
+#include "../physics/Physics.h"
 
 void TEST_BUILDING_RaptorEngine() {
     auto* director = new EngineDirector();
