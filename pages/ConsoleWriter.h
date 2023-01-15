@@ -474,6 +474,72 @@ public:
 
     }
 
+    static void expertRocketBuilderScreen(Shed& shed, MissionControl& missionControl) {
+        clearConsole();
+        std::cout << "If you reached here, you probably know what you are doing." << std::endl;
+        std::cout << "There is no way back, nor any instructions." << std::endl;
+        std::cout << "Rules are the same as in beginner and advanced mode." << std::endl;
+        std::cout << "...okay, if you entered here by mistake, you can go back..." << std::endl;
+        std::cout << "1. Start building." << std::endl;
+        std::cout << "2. Go back." << std::endl;
+
+        std::string userChoice;
+        while (true) {
+            std::cin >> userChoice;
+            if (userChoice != "1" && userChoice != "2") {
+                std::cout << "Invalid input! Try again: ";
+            } else {
+                break;
+            }
+        }
+
+        if (userChoice == "2") {
+            buildingOptionsScreen(shed, missionControl);
+        }
+
+        //TODO: Validate input!
+        std::cout << "Your input is not validated, because you are an expert!" << std::endl;
+
+        while(true) {
+            std::cout << "Fuel tank dry mass (kg): ";
+            double fuelTankDryMass;
+            std::cin >> fuelTankDryMass;
+            std::cout << "Fuel tank fuel mass (kg): ";
+            double fuelTankFuelMass;
+            std::cin >> fuelTankFuelMass;
+            std::cout << "Max engine support: ";
+            int maxEngineSupport;
+            std::cin >> maxEngineSupport;
+            std::cout << "Engine mass (kg): ";
+            double engineMass;
+            std::cin >> engineMass;
+            std::cout << "Engine specific impulse (s): ";
+            double engineSpecificImpulse;
+            std::cin >> engineSpecificImpulse;
+            std::cout << "Engine mass flow rate (kg/s): ";
+            double engineMassFlowRate;
+            std::cin >> engineMassFlowRate;
+            std::cout << "Number of engines: ";
+            int engineCount;
+            std::cin >> engineCount;
+
+            shed.buildSpecificRocketStage(fuelTankDryMass, fuelTankFuelMass, maxEngineSupport, engineMass, engineSpecificImpulse, engineMassFlowRate, engineCount);
+
+            shed.drawRocketStagesASCII();
+            shed.printRocketInfo();
+
+            std::cout << "Type [finish] to finish building, or anything else to continue building, and hit enter: ";
+            std::cin >> userChoice;
+            if (userChoice == "finish") {
+                rocketStageConnectionsScreen(shed, missionControl);
+                break;
+            }
+
+        }
+
+
+    }
+
     static void buildingOptionsScreen(Shed& shed, MissionControl& missionControl) {
         clearConsole();
         std::cout << "Choose build option:" << std::endl;
@@ -498,7 +564,7 @@ public:
         } else if (userChoice == "2") {
             advancedRocketBuilderScreen(shed, missionControl);
         } else if (userChoice == "3") {
-            // TODO: Implement this
+            expertRocketBuilderScreen(shed, missionControl);
         } else if (userChoice == "4") {
             homeScreen(shed, missionControl);
         }

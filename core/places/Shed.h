@@ -112,15 +112,14 @@ public:
         rocket->stages.push_back(rocketStageBuilder->getResult());
     }
 
-    void buildSpecificRocketStage(double mass, double fuelAmount, int maxEngineNumberSupport, const std::string& engineType, int numberOfEngines) {
+    void buildSpecificRocketStage(double mass, double fuelAmount, int maxEngineNumberSupport, double engineMass, double specificImpulse, double massFlowRate, int numberOfEngines) {
         rocketStageBuilder->initRocketStageSpace();
         rocketStageBuilder->mountSpecificFuelTank(mass, fuelAmount, maxEngineNumberSupport);
+        if(numberOfEngines > maxEngineNumberSupport) {
+            numberOfEngines = maxEngineNumberSupport;
+        }
         for (int i = 0; i < numberOfEngines; i++) {
-            if (engineType == "Raptor") {
-                rocketStageBuilder->mountSpaceXRaptorV1Engine();
-            } else {
-                throw std::invalid_argument("Engine type not supported");
-            }
+            rocketStageBuilder->mountSpecificEngine(engineMass, specificImpulse, massFlowRate);
         }
         rocket->stages.push_back(rocketStageBuilder->getResult());
     }
