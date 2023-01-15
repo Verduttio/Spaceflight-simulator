@@ -39,7 +39,7 @@ unsigned int validateUserRocketControlInput(const std::string& input) {
 }
 
 void controlRocketScreen(Shed& shed, MissionControl& missionControl) {
-    while(true) {
+    while(!missionControl.getAbortFlightValue()) {
         std::cout << "[t] - display rocket telemetry" << std::endl;
         std::cout << "[abort] - abort the flight" << std::endl;
         std::cout << "[rs] - print rocket stages and its connections" << std::endl;
@@ -50,7 +50,7 @@ void controlRocketScreen(Shed& shed, MissionControl& missionControl) {
         std::string userInput;
         while (true) {
             std::cin >> userInput;
-            if (validateUserRocketControlInput(userInput) == 0) {
+            if (validateUserRocketControlInput(userInput) == 0 && !missionControl.getAbortFlightValue()) {
                 std::cout << "Incorrect input." << std::endl;
             } else {
                 break;
@@ -65,7 +65,6 @@ void controlRocketScreen(Shed& shed, MissionControl& missionControl) {
                 missionControl.printRocketTelemetry();
             } else if (userInput == "abort") {
                 missionControl.terminateFlight();
-                break;
             } else if (userInput == "rs") {
                 missionControl.drawRocketStagesASCII();
                 missionControl.printRocketStagesConnections();

@@ -96,6 +96,13 @@ public:
 
             rocketFlightLogic(deltaT_s, deltaPhi);
 
+            // We abort the flight if the rocket come back to the planet surface
+            if (rocket->altitude <= 0) {
+                abortFlight = true;
+                std::cout << "The rocket has crashed!" << std::endl;
+                std::cout << "Press any key and hit enter to continue..." << std::endl;
+            }
+
 
             // For output data
             xPosition = getAbsoluteRocketAltitude()/1000.0 * sin(rocket->anglePhi);
@@ -124,6 +131,11 @@ public:
         double deltaPhi = 0;
         while(flightDuration < simulationTime) {
             rocketFlightLogic(deltaT_s, deltaPhi);
+            // We abort the flight if the rocket come back to the planet surface
+            if (rocket->altitude <= 0) {
+                abortFlight = true;
+                std::cout << "Simulation aborted. Rocket has crashed to the planet surface." << std::endl;
+            }
 
             // For output data
             xPosition = getAbsoluteRocketAltitude()/1000.0 * sin(rocket->anglePhi);
@@ -200,6 +212,10 @@ public:
 
     void terminateFlight() {
         this->abortFlight = true;
+    }
+
+    bool getAbortFlightValue() {
+        return this->abortFlight;
     }
 
     void setMissionControl() {
