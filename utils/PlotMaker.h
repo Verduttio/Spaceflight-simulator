@@ -9,13 +9,15 @@
 #include "DataReader.h"
 #include "pbPlots/pbPlots.hpp"
 #include "pbPlots/supportLib.hpp"
+#include "../physics/Physics.h"
 
 
 class PlotMaker {
 public:
-    static std::vector<double> xEarthFull;
 
-    static std::vector<double> yEarthFull;
+    static std::vector<double> xPlanet;
+    static std::vector<double> yPlanet;
+    static constexpr int NUMBER_OF_PLANET_POINTS = 64;
 
     static void plot(std::vector<double>& x1, std::vector<double>& y1, std::vector<double>& x2, std::vector<double>& y2, const std::string& outputFileName) {
         RGBABitmapImageReference* imageRef = CreateRGBABitmapImageReference();
@@ -59,18 +61,46 @@ public:
     }
 
     static void plotRocketTrajectoryToFiles() {
+//        constexpr double angleDeltaVal = (2*Physics::PI / (NUMBER_OF_PLANET_POINTS-1));
+//        SetPlanetXValues<NUMBER_OF_PLANET_POINTS, angleDeltaVal, Physics::EARTH_RADIUS>(xPlanet);
+//        SetPlanetYValues<NUMBER_OF_PLANET_POINTS, angleDeltaVal, Physics::EARTH_RADIUS>(yPlanet);
+
         std::vector<std::string> data = DataReader::readFile("rocketTelemetry_live.txt");
         std::vector<double> x = DataReader::getValuesByColumn(data, 1);
         std::vector<double> yRocket = DataReader::getValuesByColumn(data, 2);
         std::vector<double> yEarth = DataReader::getValuesByColumn(data, 3);
 
         PlotMaker::plot(x, yEarth, x, yRocket, "rocketTrajectory.png");
-        PlotMaker::plot(PlotMaker::xEarthFull, PlotMaker::yEarthFull, x, yRocket,  "rocketTrajectoryFull.png");
+        PlotMaker::plot(xPlanet, yPlanet, x, yRocket,  "rocketTrajectoryFull.png");
     }
 
+private:
+    static constexpr double angleDelta(int numberOfPoints) {
+        return (2*Physics::PI / (numberOfPoints-1));
+    }
+
+    template<int N, double angleDelta, double planetRadius, typename T>
+    static constexpr void SetPlanetXValues(T& values) {
+        if constexpr (N > 0) {
+            values[N-1] = planetRadius * sin(angleDelta * (N-1));
+            SetPlanetXValues<N-1, angleDelta, planetRadius>(values);
+        }
+    }
+
+    template<int N, double angleDelta, double planetRadius, typename T>
+    static constexpr void SetPlanetYValues(T& values) {
+        if constexpr (N > 0) {
+            values[N-1] = planetRadius * cos(angleDelta * (N-1));
+            SetPlanetYValues<N-1, angleDelta, planetRadius>(values);
+        }
+    }
 };
 
-std::vector<double> PlotMaker::xEarthFull = {0,
+//std::vector<double> PlotMaker::xPlanet = std::vector<double>(NUMBER_OF_PLANET_POINTS);
+//std::vector<double> PlotMaker::yPlanet = std::vector<double>(NUMBER_OF_PLANET_POINTS);
+
+
+std::vector<double> PlotMaker::xPlanet = {0,
                                                   635.938864,
                                                   1265.523637,
                                                   1882.463716,
@@ -136,7 +166,7 @@ std::vector<double> PlotMaker::xEarthFull = {0,
                                                   107.1045461
 };
 
-std::vector<double> PlotMaker::yEarthFull = {
+std::vector<double> PlotMaker::yPlanet = {
         6370,
         6338.176533,
         6243.024101,
