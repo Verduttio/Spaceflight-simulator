@@ -16,7 +16,7 @@ public:
         fuelTank = new FuelTank();
     }
 
-    void initFuelTankSpace() {
+    void initFuelTankSpace() override {
         fuelTank = new FuelTank();
     }
 

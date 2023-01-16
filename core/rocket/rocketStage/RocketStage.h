@@ -12,7 +12,7 @@
 #include "../MountSide.h"
 
 class RocketStage {
-    int id;
+    unsigned int id;
     std::vector<Engine*> engines;
     FuelTank* fuelTank;
     std::map<MountSide, RocketStage*> connections;
@@ -21,7 +21,7 @@ public:
         this->id = _id;
     }
 
-    [[nodiscard]] int getId() const {
+    [[nodiscard]] unsigned int getId() const {
         return this->id;
     }
 
@@ -187,7 +187,7 @@ public:
         }
 
         // Draw engines
-        for(int i = 0; i < getEngineNumber(); i++) {
+        for(unsigned int i = 0; i < getEngineNumber(); i++) {
             std::cout << "e";
         }
         std::cout << std::endl;

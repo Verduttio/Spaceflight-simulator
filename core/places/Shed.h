@@ -8,52 +8,16 @@
 #include <queue>
 #include "../rocket/Rocket.h"
 #include "../rocket/rocketStage/RocketStageBuilder.h"
-#include "../rocket/engine/EngineInfoProvider.h"
-#include "../rocket/fuelTank/FuelTankInfoProvider.h"
 #include "MissionControl.h"
 
 class Shed {
     Rocket* rocket;
     RocketStageBuilder* rocketStageBuilder;
-    EngineBuilder* engineBuilder;
-    EngineDirector* engineDirector;
-    EngineInfoProvider* engineInfoProvider;
-    FuelTankBuilder* fuelTankBuilder;
-    FuelTankDirector* fuelTankDirector;
-    FuelTankInfoProvider* fuelTankInfoProvider;
 
 public:
     Shed(){
         rocket = new Rocket();
         rocketStageBuilder = new RocketStageBuilder();
-        engineBuilder = new EngineBuilder();
-        engineDirector = new EngineDirector();
-        engineInfoProvider = new EngineInfoProvider();
-        fuelTankBuilder = new FuelTankBuilder();
-        fuelTankDirector = new FuelTankDirector();
-        fuelTankInfoProvider = new FuelTankInfoProvider();
-
-
-        rocketStageBuilder->setEngineBuilder(engineBuilder);
-        rocketStageBuilder->setEngineDirector(engineDirector);
-        rocketStageBuilder->setFuelTankBuilder(fuelTankBuilder);
-        rocketStageBuilder->setFuelTankDirector(fuelTankDirector);
-    }
-
-    EngineDirector* getEngineDirector() {
-        return this->engineDirector;
-    }
-
-    EngineInfoProvider* getEngineInfoProvider() {
-        return this->engineInfoProvider;
-    }
-
-    FuelTankDirector* getFuelTankDirector() {
-        return this->fuelTankDirector;
-    }
-
-    FuelTankInfoProvider* getFuelTankInfoProvider() {
-        return this->fuelTankInfoProvider;
     }
 
     Rocket* getRocket() {
@@ -145,7 +109,7 @@ public:
     }
 
     //Find rocketStage by id
-    RocketStage* findRocketStage(int id) {
+    RocketStage* findRocketStage(unsigned int id) {
         for (auto rocketStage : rocket->stages) {
             if (rocketStage->getId() == id) {
                 return rocketStage;
@@ -159,7 +123,7 @@ public:
         // We start from rocket stage with id 0 and check if we can reach all other rocket stages
         size_t numberOfRocketStages = rocket->getNumberOfRocketStages();
         bool* stageVisited = new bool [numberOfRocketStages];
-        for (int i = 0; i < numberOfRocketStages; i++) {
+        for (unsigned int i = 0; i < numberOfRocketStages; i++) {
             stageVisited[i] = false;
         }
 
@@ -178,7 +142,7 @@ public:
         }
 
         // Check if all rocket stages were visited
-        for (int i = 0; i < numberOfRocketStages; i++) {
+        for (unsigned int i = 0; i < numberOfRocketStages; i++) {
             if (!stageVisited[i]) {
                 return false;
             }

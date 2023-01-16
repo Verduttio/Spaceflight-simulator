@@ -26,10 +26,6 @@ public:
         return rocketMass * gravityAcceleration;
     }
 
-    static double calcResultantForce(double thrust, double weight) {
-        return thrust - weight;
-    }
-
     static double calcAccelerationByForce(double force, double mass) {
         return force / mass;
     }

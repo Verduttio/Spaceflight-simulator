@@ -147,6 +147,7 @@ public:
                 return engine->getCurrentPower();
             }
         }
+        return 0;
     }
 
     double getFuelMass() {

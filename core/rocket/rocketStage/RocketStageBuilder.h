@@ -9,14 +9,18 @@
 #include "../engine/EngineDirector.h"
 #include "../fuelTank/FuelTankBuilder.h"
 #include "../fuelTank/FuelTankDirector.h"
+#include "../engine/EngineInfoProvider.h"
+#include "../fuelTank/FuelTankInfoProvider.h"
 
 class RocketStageBuilder {
     int rocketStageId;
     RocketStage* rocketStage;
     EngineBuilder* engineBuilder;
     EngineDirector* engineDirector;
+    EngineInfoProvider* engineInfoProvider;
     FuelTankBuilder* fuelTankBuilder;
     FuelTankDirector* fuelTankDirector;
+    FuelTankInfoProvider* fuelTankInfoProvider;
 public:
     void reset() {
         delete rocketStage;
@@ -31,26 +35,28 @@ public:
     RocketStageBuilder() {
         rocketStageId = 0;
         rocketStage = nullptr;
-        engineBuilder = nullptr;
-        engineDirector = nullptr;
-        fuelTankBuilder = nullptr;
-        fuelTankDirector = nullptr;
+        engineBuilder = new EngineBuilder();
+        engineDirector = new EngineDirector();
+        engineInfoProvider = new EngineInfoProvider();
+        fuelTankBuilder = new FuelTankBuilder();
+        fuelTankDirector = new FuelTankDirector();
+        fuelTankInfoProvider = new FuelTankInfoProvider();
     }
 
-    void setEngineBuilder(EngineBuilder* _engineBuilder) {
-        engineBuilder = _engineBuilder;
+    EngineDirector* getEngineDirector() {
+        return this->engineDirector;
     }
 
-    void setEngineDirector(EngineDirector* _engineDirector) {
-        engineDirector = _engineDirector;
+    EngineInfoProvider* getEngineInfoProvider() {
+        return this->engineInfoProvider;
     }
 
-    void setFuelTankBuilder(FuelTankBuilder* _fuelTankBuilder) {
-        fuelTankBuilder = _fuelTankBuilder;
+    FuelTankDirector* getFuelTankDirector() {
+        return this->fuelTankDirector;
     }
 
-    void setFuelTankDirector(FuelTankDirector* _fuelTankDirector) {
-        fuelTankDirector = _fuelTankDirector;
+    FuelTankInfoProvider* getFuelTankInfoProvider() {
+        return this->fuelTankInfoProvider;
     }
 
     void mountSpaceXRaptorV1Engine() {

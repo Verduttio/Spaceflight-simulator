@@ -13,7 +13,7 @@ public:
         std::cout << "Resetting fuel tank info provider" << std::endl;
     }
 
-    void initFuelTankSpace() {
+    void initFuelTankSpace() override {
         std::cout << "Fuel tank info:" << std::endl;
     }
 

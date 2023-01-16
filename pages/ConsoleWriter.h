@@ -411,8 +411,8 @@ public:
 
 
             std::cout << "Possible fuel tanks: " << std::endl;
-            FuelTankDirector *fuelTankDirector = shed.getFuelTankDirector();
-            FuelTankInfoProvider *fuelTankInfoProvider = shed.getFuelTankInfoProvider();
+            FuelTankDirector *fuelTankDirector = shed.getRocketStageBuilder()->getFuelTankDirector();
+            FuelTankInfoProvider *fuelTankInfoProvider = shed.getRocketStageBuilder()->getFuelTankInfoProvider();
             std::cout << "Fuel tank No. 1" << std::endl;
             fuelTankDirector->constructSmallFuelTankSPF(fuelTankInfoProvider);
             std::cout << "\nFuel tank No. 2" << std::endl;
@@ -424,8 +424,8 @@ public:
 
 
             std::cout << "Possible engines: " << std::endl;
-            EngineDirector *engineDirector = shed.getEngineDirector();
-            EngineInfoProvider *engineInfoProvider = shed.getEngineInfoProvider();
+            EngineDirector *engineDirector = shed.getRocketStageBuilder()->getEngineDirector();
+            EngineInfoProvider *engineInfoProvider = shed.getRocketStageBuilder()->getEngineInfoProvider();
             std::cout << "Engine No. 1" << std::endl;
             engineDirector->constructHawkEngineSPF(engineInfoProvider);
             std::cout << "\nEngine No. 2" << std::endl;

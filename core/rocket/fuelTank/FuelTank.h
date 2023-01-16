@@ -27,7 +27,7 @@ public:
         return this->fuelAmount;
     }
 
-    [[nodiscard]] int getMaxEngineNumberSupport() const {
+    [[nodiscard]] size_t getMaxEngineNumberSupport() const {
         return this->maxEngineNumberSupport;
     }
 

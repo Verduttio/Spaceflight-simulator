@@ -5,16 +5,16 @@
 #ifndef ABSTRACTPROGRAMMINGPROJECT_OUT_MISSIONCONTROL_H
 #define ABSTRACTPROGRAMMINGPROJECT_OUT_MISSIONCONTROL_H
 
-#include "../planet/Planet.h"
-#include "../rocket/Rocket.h"
 #include <cmath>
 #include <thread>
 #include <chrono>
-#include "../../physics/ConversionsSI.h"
-#include "../../physics/Physics.h"
 #include <fstream>
 #include <iomanip>
 #include <thread>
+#include "../../physics/ConversionsSI.h"
+#include "../../physics/Physics.h"
+#include "../planet/Planet.h"
+#include "../rocket/Rocket.h"
 
 class MissionControl {
     Rocket* rocket;
@@ -84,13 +84,13 @@ public:
     }
 
 
-    [[noreturn]] void launchRocket() {
+    void launchRocket() {
         std::ofstream rocketTelemetryFile;
         rocketTelemetryFile.open("rocketTelemetry_live.txt");
+        setPowerForAllEngines(100);
 
         const double deltaT_s = ConversionSI::convertTimeMS_TO_S(deltaT_ms);
         double deltaPhi = 0;
-        setPowerForAllEngines(100);
         while(!abortFlight) {
 
             rocketFlightLogic(deltaT_s, deltaPhi);
@@ -115,16 +115,15 @@ public:
         rocketTelemetryFile.close();
     }
 
-    void launchRocketSimulation() {
-        double simulationTime = 0;   // in seconds
-
-        std::ofstream rocketPositionFile;
-        rocketPositionFile.open("rocketPosition.txt");
+    void launchRocketSimulation(double simulationTime) {
+        // Simulation time is in seconds
+        std::ofstream rocketTelemetryFile;
+        rocketTelemetryFile.open("rocketPosition.txt");
 
         // init data
-        this->rocket->altitude=300000;   // m
-        this->rocket->velocityPhi=7734.2;   // m/s     // between 7734.2 a 7734.3
-        this->rocket->angle = 90;   // 90 degrees
+//        this->rocket->altitude=300000;   // m
+//        this->rocket->velocityPhi=7734.2;   // m/s     // between 7734.2 a 7734.3
+//        this->rocket->angle = 90;   // 90 degrees
         // init data - end
 
         const double deltaT_s = ConversionSI::convertTimeMS_TO_S(deltaT_ms);
@@ -140,10 +139,10 @@ public:
             // For output data
             xPosition = getAbsoluteRocketAltitude()/1000.0 * sin(rocket->anglePhi);
             yPosition = getAbsoluteRocketAltitude()/1000.0 * cos(rocket->anglePhi);
-            rocketPositionFile << flightDuration << "|" << xPosition << "|" << yPosition << "|" << getAbsoluteRocketAltitude() << "|" << enginesCurrentThrust << "|" << rocket->velocityPhi << "|" << rocket->velocityR << "|" << rocket->accelerationR << "|" << gravityAcc << "|" << gravityForce << "|" << centrifugalForce << "|" << forceR << "|" << forcePhi << "|" << rocket->angle << "|" << Physics::convertDegreesToRadians(rocket->angle) << std::endl;
+            rocketTelemetryFile << flightDuration << "|" << xPosition << "|" << yPosition << "|" << getAbsoluteRocketAltitude() << "|" << enginesCurrentThrust << "|" << rocket->velocityPhi << "|" << rocket->velocityR << "|" << rocket->accelerationR << "|" << gravityAcc << "|" << gravityForce << "|" << centrifugalForce << "|" << forceR << "|" << forcePhi << "|" << rocket->angle << "|" << Physics::convertDegreesToRadians(rocket->angle) << std::endl;
         }
 
-        rocketPositionFile.close();
+        rocketTelemetryFile.close();
     }
 
     void printRocketTelemetry() {
@@ -214,7 +213,7 @@ public:
         this->abortFlight = true;
     }
 
-    bool getAbortFlightValue() {
+    bool getAbortFlightValue() const {
         return this->abortFlight;
     }
 
