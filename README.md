@@ -14,7 +14,16 @@ You can build your own rocket and launch it. During the flight you can control r
 
 ## Usage (docker)
 
-All what you have to do is to just build the project via comand run in the project root directory:
+**Make sure that your `build_tools` directory is not empty. If it is, just download these files: `https://github.com/f-squirrel/dockerized_cpp` and move them into the `build_tools` directory.** 
+
+Run all these commands in the root of the project directory.
+
+Firstly you have to build a docker container:
+```
+sudo docker build -t example/example_build:0.1 -f DockerfileBuildEnv .
+```
+
+Now just build the project:
 ```
 sudo make
 ```
