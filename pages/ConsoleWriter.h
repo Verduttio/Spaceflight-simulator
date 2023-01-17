@@ -35,28 +35,6 @@ public:
         PlotMaker::plotRocketTrajectoryToFiles();
     }
 
-    static unsigned int validateUserRocketControlInput(const std::string& input) {
-        // Possible options:
-        // Single argument commands: t, abort, rs   return 1
-        // Double argument commands: aXY, pXY, dX   return 2
-        // Invalid input: anything else        return 0
-
-        // Firstly check whether input is a single argument command
-        // then check whether input is a double argument command
-
-        if (input == "t" || input == "abort" || input == "rs") {
-            return 1;
-        } else {
-            try {
-                std::stoi(input.substr(1));
-                return 2;
-            } catch (std::invalid_argument& e) {
-                return 0;
-            }
-        }
-
-    }
-
     static void controlRocketScreen(Shed& shed, MissionControl& missionControl) {
         while(!missionControl.getAbortFlightValue()) {
             std::cout << "[t] - display rocket telemetry" << std::endl;
@@ -598,6 +576,29 @@ public:
         } else if (userChoice == "3") {
             exit(0);
         }
+    }
+
+private:
+    static unsigned int validateUserRocketControlInput(const std::string& input) {
+        // Possible options:
+        // Single argument commands: t, abort, rs   return 1
+        // Double argument commands: aXY, pXY, dX   return 2
+        // Invalid input: anything else        return 0
+
+        // Firstly check whether input is a single argument command
+        // then check whether input is a double argument command
+
+        if (input == "t" || input == "abort" || input == "rs") {
+            return 1;
+        } else {
+            try {
+                std::stoi(input.substr(1));
+                return 2;
+            } catch (std::invalid_argument& e) {
+                return 0;
+            }
+        }
+
     }
 };
 

@@ -213,7 +213,7 @@ public:
         this->abortFlight = true;
     }
 
-    bool getAbortFlightValue() const {
+    [[nodiscard]] bool getAbortFlightValue() const {
         return this->abortFlight;
     }
 
