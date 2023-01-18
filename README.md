@@ -39,3 +39,7 @@ Execution:
 
 ## Documentation
 Extensive documentation is provided in `/documentation` directory. There are many images and one general file. 
+
+![UML](https://user-images.githubusercontent.com/72033031/212944775-fbfd4e9a-b764-4406-a4ba-ef9b7e7b1804.jpg)
+
+
